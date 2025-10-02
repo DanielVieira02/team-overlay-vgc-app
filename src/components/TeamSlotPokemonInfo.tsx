@@ -1,13 +1,22 @@
 import "./TeamSlot.css";
 import { Pokemon } from "koffing"
+import ItemTranslator from "../assets/TranslatorItems.json"
+
+type ItemFile = {
+    [key: string]: string
+}
 
 interface TeamSlotPokemonInfo {
     pokemon: Pokemon,
 }
 
+const allData: ItemFile = ItemTranslator;
+
 export const TeamSlotPokemonInfo = ({
     pokemon
 }: TeamSlotPokemonInfo) => {
+    const itemHref = pokemon.item ? `/assets/ItemsIcons/${allData[pokemon.item]}.png` : "/assets/Pokeballs/pokeballA.png";
+
     return (
         <g>
             <path 
@@ -24,6 +33,12 @@ export const TeamSlotPokemonInfo = ({
                 r="36"
                 className="teamSlotItemBackground"
             />
+            <image
+                x="858"
+                y="154"
+                className="itemIcon"
+                href={itemHref}
+            />  
             <text 
                 x="264"
                 y="201"

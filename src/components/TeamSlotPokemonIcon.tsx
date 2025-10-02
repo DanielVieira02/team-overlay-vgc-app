@@ -17,16 +17,15 @@ export const TeamSlotPokemonIcon = ({
     pokemon
 }: TeamSlotPokemonIconProps) => {
 
-    const pokemonName = pokemon.name;
-    console.log(allData);
+    const imgRef = pokemon.name ? `/assets/PokeIcons/${allData[pokemon.name]}.png` :  "/assets/Pokeballs/pokeballA.png";
 
     return (
         <image 
             width="200px"
             height="200px"
             x="648"
-            y="356"
-            href={pokemonName ? `../assets/PokeIcons/${allData[pokemonName]}.png}` : "../assets/PokeIcons/038_001.png"}
+            y="300"
+            href={imgRef}
             className="pokemonIcon"
         />
     )

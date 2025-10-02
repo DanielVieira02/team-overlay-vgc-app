@@ -3,6 +3,7 @@ import { TeamSlotBody } from "./TeamSlotBody"
 import { TeamSlotHeader } from "./TeamSlotHeader"
 import { TeamSlotPokemonInfo } from "./TeamSlotPokemonInfo"
 import { TeamSlotPokemonIcon } from "./TeamSlotPokemonIcon"
+import { TeamSlotMove } from "./TeamSlotMove"
 
 interface TeamSlotProps {
     pokemon: Pokemon,
@@ -19,6 +20,9 @@ export const TeamSlot = ({
             <TeamSlotHeader pokemon={pokemon}/>
             <TeamSlotPokemonInfo pokemon={pokemon}/>
             <TeamSlotPokemonIcon pokemon={pokemon}/>
+            {pokemon.moves.map((move, moveSlotId) => (
+                <TeamSlotMove move={move} slotId={moveSlotId} key={`${pokemon.name}-${move}`}/>
+            ))}
         </g>
     )
 }

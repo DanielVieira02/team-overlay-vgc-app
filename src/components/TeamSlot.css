@@ -29,6 +29,10 @@
     fill: white;
 }
 
+.teamSlotMove {
+    fill: var(--primary-color);
+}
+
 .textPokemonName {
     font-family: "NotoSans";
     font-size: 46;
@@ -43,8 +47,27 @@
     text-anchor: middle;
 }
 
+.textPokemonMove {
+    font-family: "NotoSans";
+    font-size: 32;
+    fill: white;
+    text-anchor: left;
+}
+
+
 .pokemonIcon {
     border: black 1px;
-    width: 200px;
-    height: 200px;
+    width: 250px;
+    height: 250px;
+}
+
+.itemIcon {
+    width: 64px;
+    height: 64px;
+}
+
+.typeIcon {
+    width: 76px;
+    height: 76px;
+    position-anchor: middle;
 }
