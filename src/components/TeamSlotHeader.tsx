@@ -50,6 +50,7 @@ export const TeamSlotHeader = ({
             <TypeIcon 
                 position={{x: TYPE_ICONS_X_POSITION + 24, y: TYPE_ICONS_Y_POSITION}}
                 type={pokemon.teraType ?? ""}
+                teraType={true}
             />
         </g>
     )
