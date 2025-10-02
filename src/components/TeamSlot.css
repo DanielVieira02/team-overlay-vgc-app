@@ -4,25 +4,29 @@
 }
 
 :root {
-    --body-color: #840184ff;
-    --primary-color: #410038ff;
-    --secondary-color: #7e7e7eff;
+    --body-color: #003041;
+    --primary-color: #000000;
+    --secondary-color: #007aa3;
 }
 
 .teamSlotBody {
     fill: var(--body-color);
+    filter: drop-shadow(-10px 8px 4px hwb(240 0% 84%));
 }
 
 .teamSlotHeader {
+    filter: drop-shadow(-10px 8px 4px #000029);
     fill: var(--primary-color);
 }
 
 .teamSlotItem {
     fill: var(--primary-color);
+    filter: drop-shadow(-4px 10px 4px #000029);
 }
 
 .teamSlotAbility {
     fill: var(--secondary-color);
+    filter: drop-shadow(-4px 10px 4px #000029);
 }
 
 .teamSlotItemBackground {
@@ -31,6 +35,7 @@
 
 .teamSlotMove {
     fill: var(--primary-color);
+    filter: drop-shadow(-4px 10px 4px #000029);
 }
 
 .textPokemonName {
@@ -56,7 +61,7 @@
 
 
 .pokemonIcon {
-    border: black 1px;
+    filter: drop-shadow(-4px 10px 4px #000029);
     width: 250px;
     height: 250px;
 }
@@ -70,4 +75,15 @@
     width: 76px;
     height: 76px;
     position-anchor: middle;
+}
+
+.moveTypeIcon {
+    width: 56px;
+    height: 56px;
+    position-anchor: middle;
+}
+
+.teraTab {
+    stroke: #999999; 
+    stroke-width: 4;
 }

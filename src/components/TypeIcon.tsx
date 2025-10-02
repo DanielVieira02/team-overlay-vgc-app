@@ -1,12 +1,14 @@
 
 interface TypeIconProps {
     type: string,
-    position: {x: number, y: number}
+    position: {x: number, y: number},
+    className?: string
 }
 
 export const TypeIcon = ({
     type,
-    position
+    position,
+    className,
 }: TypeIconProps) => {
     const typeHref = `/assets/TypeIcons/${type.toLowerCase()}.svg`;
     
@@ -15,7 +17,7 @@ export const TypeIcon = ({
             x={position.x}
             y={position.y}
             href={typeHref}
-            className="typeIcon"
+            className={className ?? "typeIcon"}
         />
     )
 }

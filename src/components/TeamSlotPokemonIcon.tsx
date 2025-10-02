@@ -1,23 +1,17 @@
 import { Pokemon } from "koffing";
+import { getPokemonIcon } from "../lib/pokedex.js";
 
-import PokemonTranslator from "../assets/TranslatorPokes.json"
 import "./TeamSlot.css";
-
-type PokemonFile = {
-    [key: string]: string
-}
-
 interface TeamSlotPokemonIconProps {
     pokemon: Pokemon
 }
-
-const allData: PokemonFile = PokemonTranslator;
 
 export const TeamSlotPokemonIcon = ({
     pokemon
 }: TeamSlotPokemonIconProps) => {
 
-    const imgRef = pokemon.name ? `/assets/PokeIcons/${allData[pokemon.name]}.png` :  "/assets/Pokeballs/pokeballA.png";
+    const pokemonImg = getPokemonIcon(pokemon.name);
+    const imgRef = pokemonImg ? `/assets/PokeIcons/${pokemonImg}.png` :  "/assets/Pokeballs/pokeballA.png";
 
     return (
         <image 
