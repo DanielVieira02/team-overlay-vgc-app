@@ -1,7 +1,7 @@
 import { Pokemon } from "koffing";
-import { getPokemonIcon } from "../lib/pokedex.js";
+import { getPokemonIcon } from "../../lib/pokedex.js";
 
-import "./style/TeamSlot.css";
+import "./style.css";
 interface TeamSlotPokemonIconProps {
     pokemon: Pokemon
 }

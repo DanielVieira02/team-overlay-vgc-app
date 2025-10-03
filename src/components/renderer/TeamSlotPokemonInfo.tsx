@@ -1,6 +1,6 @@
-import "./style/TeamSlot.css";
+import "./style.css";
 import { Pokemon } from "koffing"
-import ItemTranslator from "../assets/TranslatorItems.json"
+import ItemTranslator from "../../assets/TranslatorItems.json"
 
 type ItemFile = {
     [key: string]: string

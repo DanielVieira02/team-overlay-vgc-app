@@ -1,4 +1,4 @@
-import { TeamRenderer } from '../components/TeamRenderer';
+import { TeamRenderer } from '../components/renderer/TeamRenderer';
 import { useParams } from "react-router";
 
 import "./teamListRenderer.css";

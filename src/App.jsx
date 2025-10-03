@@ -1,12 +1,11 @@
 import './App.css';
-import { PlayerRegistration } from './components/PlayerRegistration';
-import { TeamRenderer } from './components/TeamRenderer';
+import { OBSController } from './pages/OBSController';
 
 const App = () => {
   return (
     <div className="content">
       <div>
-        <PlayerRegistration />
+        <OBSController />
       </div>
     </div>
   );

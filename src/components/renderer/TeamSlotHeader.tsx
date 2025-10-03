@@ -1,8 +1,8 @@
-import "./style/TeamSlot.css";
+import "./style.css";
 
 import { Pokemon } from "koffing"
 import { TypeIcon } from "./TypeIcon";
-import * as pokedex from "../lib/pokedex";
+import * as pokedex from "../../lib/pokedex";
 
 interface TeamSlotHeader {
     pokemon: Pokemon,

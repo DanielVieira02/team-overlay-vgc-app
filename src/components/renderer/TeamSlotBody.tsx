@@ -1,4 +1,4 @@
-import "./style/TeamSlot.css";
+import "./style.css";
 
 export const TeamSlotBody = () => {
     return (
