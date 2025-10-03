@@ -1,10 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import { BrowserRouter, Routes, Route } from 'react-router';
+import TeamListRendererPage from './pages/TeamListRendererPage';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<App />} />
+        
+        <Route path="teamlist/:pokepaste" element={<TeamListRendererPage />} />
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>,
 );

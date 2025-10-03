@@ -1,4 +1,4 @@
-import "./TeamSlot.css";
+import "./style/TeamSlot.css";
 
 import { Pokemon } from "koffing"
 import { TypeIcon } from "./TypeIcon";
@@ -48,7 +48,7 @@ export const TeamSlotHeader = ({
                 className="teraTab"
             />
             <TypeIcon 
-                position={{x: TYPE_ICONS_X_POSITION + 24, y: TYPE_ICONS_Y_POSITION}}
+                position={{x: TYPE_ICONS_X_POSITION, y: TYPE_ICONS_Y_POSITION - 24}}
                 type={pokemon.teraType ?? ""}
                 teraType={true}
             />

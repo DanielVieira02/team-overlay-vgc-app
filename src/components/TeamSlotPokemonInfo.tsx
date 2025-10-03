@@ -1,4 +1,4 @@
-import "./TeamSlot.css";
+import "./style/TeamSlot.css";
 import { Pokemon } from "koffing"
 import ItemTranslator from "../assets/TranslatorItems.json"
 
@@ -42,7 +42,7 @@ export const TeamSlotPokemonInfo = ({
             <text 
                 x="264"
                 y="201"
-                className="textPokemonInfo"
+                className="textPokemonAbility"
             >
                 {pokemon.ability}
             </text>

@@ -1,5 +1,5 @@
 import { getMoveType } from "../lib/pokedex";
-import "./TeamSlot.css";
+import "./style/TeamSlot.css";
 import { TypeIcon } from "./TypeIcon";
 
 interface TeamSlotMoveProps {
