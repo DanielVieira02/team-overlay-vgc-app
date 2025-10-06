@@ -9,6 +9,7 @@
     "preview": "rsbuild preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.90.2",
     "koffing": "^1.0.0",
     "obs-websocket-js": "^5.0.6",
     "react": "^19.1.1",
