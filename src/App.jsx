@@ -1,11 +1,11 @@
 import './App.css';
-import { OBSController } from './pages/OBSController';
+import { OBSRemoteController } from './pages/OBSRemoteController';
 
 const App = () => {
   return (
     <div className="content">
       <div>
-        <OBSController />
+        <OBSRemoteController />
       </div>
     </div>
   );
