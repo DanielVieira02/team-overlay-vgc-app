@@ -13,8 +13,6 @@ export function savePlayer(playerName, playerTeam) {
     playersStorage.push(player);
 
     localStorage.setItem("players", JSON.stringify(playersStorage));
-
-    console.log("Jogador salvo");
 }
 
 export function getPlayers() {

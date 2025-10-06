@@ -22,7 +22,7 @@ function formatMoveName(moveName) {
         return "";
     }
 
-    let result = moveName.replace("-", "");
+    let result = moveName.replace(/-/g,'');
     result = result.replace(/ /g,'');
     result = result.toLowerCase();
     return result;
@@ -32,8 +32,6 @@ export function getPokemonTypes(pokemonName) {
     if(!pokemonName) {
         return [];
     }
-
-    console.log(pokemonName);
 
     const pokemonNameFormatted = formatPokemonName(pokemonName);
     const pokemon = pokedex[pokemonNameFormatted];

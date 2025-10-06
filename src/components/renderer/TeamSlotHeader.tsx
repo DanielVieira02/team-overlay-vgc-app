@@ -23,8 +23,6 @@ export const TeamSlotHeader = ({
 
     const pokemonName = pokedex.formatPokemonNameTitle(pokemon.name);
 
-    console.log(types);
-
     return (
         <g>
             <path 
