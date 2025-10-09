@@ -1,8 +1,17 @@
-import OBSWebSocket from "obs-websocket-js";
+import OBSWebSocket, { OBSWebSocketError } from "obs-websocket-js";
 
-export async function CreateOBSConnection(): Promise<OBSWebSocket> {
+export async function CreateOBSConnection(url: string, password?: string): Promise<OBSWebSocket> {
     const obs = new OBSWebSocket();
-    await obs.connect();
+    try {
+        const {
+            obsWebSocketVersion,
+            negotiatedRpcVersion
+        } = await obs.connect(url, password);
+        console.log(`Connected to server ${obsWebSocketVersion} (using RPC ${negotiatedRpcVersion})`);
+    } catch (error) {
+        console.log("Erro ao tentar conectar com o OBS");
+        throw new OBSWebSocketError(error.code, error.message);
+    }
     return obs;
 }
 

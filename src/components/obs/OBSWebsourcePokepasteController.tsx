@@ -13,7 +13,7 @@ export const OBSWebsourcePokepasteController = ({
     obsConnection,
     inputName,
 }: OBSWebsourcePokepasteControllerProps) => {
-    const [ pokepaste, setPokepaste ] = useState<string>();
+    const [ pokepaste, setPokepaste ] = useState<string>("");
 
     const transformPokepaste = function (pokepaste: string) {
         return "http://localhost:3000/teamlist/" + pokepaste.split("https://pokepast.es/")[1];
@@ -24,7 +24,7 @@ export const OBSWebsourcePokepasteController = ({
     })
 
     const handleSetPokepaste = function (newPokepaste: any) {
-        setPokepaste(newPokepaste.target.value);
+        setPokepaste(newPokepaste);
     }
 
     return (
@@ -32,7 +32,7 @@ export const OBSWebsourcePokepasteController = ({
             <h3>{inputName}</h3>
             <InputField 
                 label="Insira aqui a poképaste"
-                value={pokepaste ?? ""}
+                value={pokepaste}
                 onChange={handleSetPokepaste}
             />
             <button

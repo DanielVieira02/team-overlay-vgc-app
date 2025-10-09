@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { GetOBSScenesList } from "../../lib/obsConnection";
 
 interface OBSSceneListProps {
-    obsConnection: OBSWebSocket | undefined,
+    obsConnection: OBSWebSocket,
     onSelectScene: (scene: string) => void
 }
 
@@ -15,7 +15,7 @@ export const OBSSceneList = ({
 }: OBSSceneListProps) => {
     const { isPending: scenesLoading, error: scenesError, data: scenesList } = useQuery({
         queryKey: ["getOBSScenesList"],
-        queryFn: () => obsConnection ? GetOBSScenesList(obsConnection) : [],
+        queryFn: () => GetOBSScenesList(obsConnection),
         enabled: !!obsConnection,
     })
 

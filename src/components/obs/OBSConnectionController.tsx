@@ -1,44 +1,18 @@
-import { CreateOBSConnection, GetOBSWebsourcesList } from "../../lib/obsConnection"
-import { useQuery } from "@tanstack/react-query";
 import { OBSSceneList } from "./OBSSceneList";
-import { OBSSourcesList } from "./OBSSourcesList";
+import { OBSWebsourcesList } from "./OBSSourcesList";
 import { OBSWebsourcePokepasteController } from "./OBSWebsourcePokepasteController";
 import OBSWebSocket from "obs-websocket-js";
 import { useState } from "react";
+import { OBSAuthentication } from "./OBSAuthentication";
 
 export const OBSConnectionController = () => {
+    const [ selectedScene, setSelectedScene ] = useState<string>();
     const [ selectedSource, setSelectedSource ] = useState<string>();
 
-    const { data: obsConnection } = useQuery({
-        queryKey: ["createOBSConnection"],
-        queryFn: CreateOBSConnection,
-    })
-
-    function useOBSSourceList(selectedScene: string, obsConnection?: OBSWebSocket) {
-        const { data } = useQuery({
-            queryKey: ['OBS_source_list', selectedScene],
-            queryFn: () => {
-                if (!obsConnection) {
-                    return [];
-                }
-                return GetOBSWebsourcesList(obsConnection, selectedScene)
-            },
-        })
-
-        return data;
-    }
-
-    const { data: sourcesList, refetch: getWebsources } = useQuery({
-        queryKey: ["getOBSWebsourcesList"],
-        queryFn: () => obsConnection && selectedScene ? GetOBSWebsourcesList(obsConnection, selectedScene) : [],
-        enabled: false,
-    })
-
-    let selectedScene = "";
+    const [ obsConnection, setObsConnection ] = useState<OBSWebSocket>();
 
     const handleSelectedScene = function(newSelectedScene: string) {
-        selectedScene = newSelectedScene;
-        getWebsources();
+        setSelectedScene(newSelectedScene);
     }
 
     const handleSelectedSource = function(newSelectedSource: string) {
@@ -55,11 +29,12 @@ export const OBSConnectionController = () => {
                         onSelectScene={handleSelectedScene}
                         obsConnection={obsConnection}
                     />
-                    {!!sourcesList && sourcesList.length > 0
+                    {selectedScene
                     ?
-                    <OBSSourcesList
+                    <OBSWebsourcesList
                         onSelectSource={handleSelectedSource}
-                        sources={sourcesList}
+                        scene={selectedScene}
+                        obsConnection={obsConnection}
                     />
                     :
                     "Selecione uma cena"}
@@ -71,7 +46,9 @@ export const OBSConnectionController = () => {
                     }
                 </div>
                 :
-                "Sem conexão"
+                <OBSAuthentication 
+                    onConnect={setObsConnection}
+                />
             }
         </div>
     )
