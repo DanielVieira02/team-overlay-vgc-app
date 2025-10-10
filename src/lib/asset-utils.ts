@@ -92,8 +92,12 @@ export function getItemIconPath(itemName?: string): string {
   return '/assets/ItemsIcons/0.png'
 }
 
-export function getTypeIconPath(typeName: string): string {
+export function getTypeIconPath(typeName: string, isTera?: boolean): string {
   // Type icons are typically lowercase
   const cleanType = typeName.toLowerCase()
+
+  if (isTera)
+    return `/assets/TypeIcons/TeraType/${cleanType}.png`
+  
   return `/assets/TypeIcons/${cleanType}.png`
 }

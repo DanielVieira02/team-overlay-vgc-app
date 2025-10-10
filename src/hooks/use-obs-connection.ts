@@ -4,7 +4,7 @@ import { useState, useCallback } from "react"
 import { OBSConnection } from "@/src/lib/obs-connection"
 import { useToast } from "@/src/hooks/use-toast"
 
-export function useOBSConnection() {
+export const useOBSConnection = () => {
   const [connection, setConnection] = useState<OBSConnection | null>(null)
   const [isConnecting, setIsConnecting] = useState(false)
   const { toast } = useToast()
