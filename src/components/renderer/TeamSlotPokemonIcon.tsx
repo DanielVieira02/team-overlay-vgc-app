@@ -1,26 +1,27 @@
-import { Pokemon } from "koffing";
-import { getPokemonIcon } from "../../lib/pokedex.js";
-
 import "./style.css";
+
+import { Pokemon } from "@/src/lib/types";
+import React from "react";
+import { getPokemonIconPath } from "@/src/lib/asset-utils";
+
 interface TeamSlotPokemonIconProps {
-    pokemon: Pokemon
+  pokemon: Pokemon;
 }
 
-export const TeamSlotPokemonIcon = ({
-    pokemon
-}: TeamSlotPokemonIconProps) => {
+export const TeamSlotPokemonIcon = ({ pokemon }: TeamSlotPokemonIconProps) => {
+  const pokemonIcon = React.useMemo(
+    () => getPokemonIconPath(pokemon.species),
+    [pokemon.species],
+  );
 
-    const pokemonImg = getPokemonIcon(pokemon.name);
-    const imgRef = pokemonImg ? `/assets/PokeIcons/${pokemonImg}.png` :  "/assets/Pokeballs/pokeballA.png";
-
-    return (
-        <image 
-            width="200px"
-            height="200px"
-            x="648"
-            y="300"
-            href={imgRef}
-            className="pokemonIcon"
-        />
-    )
-}
+  return (
+    <image
+      width="200px"
+      height="200px"
+      x="648"
+      y="300"
+      href={pokemonIcon}
+      className="pokemonIcon"
+    />
+  );
+};
