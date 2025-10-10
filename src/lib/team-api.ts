@@ -1,5 +1,5 @@
-import type { TeamData } from './types'
-import { Koffing, PokemonTeam, PokemonTeamSet } from 'koffing'
+import type { TeamData } from "./types";
+import { Koffing, PokemonTeam, PokemonTeamSet } from "koffing";
 
 export async function fetchTeamData(pokePasteUrl: string): Promise<TeamData> {
   try {
