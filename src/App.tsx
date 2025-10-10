@@ -5,7 +5,6 @@ import { VGCOverlayApp } from './components/vgc-overlay-app';
 import { queryClient } from './lib/query-client';
 import { Toaster } from './components/ui/toaster';
 import { BrowserRouter, Route, Routes } from 'react-router';
-import { TeamRenderer } from './components/renderer/TeamRenderer';
 import { TeamPreviewOBSRenderer } from './components/team-preview-obs-renderer';
 
 function App() {
