@@ -1,13 +1,19 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
-import { PlayerForm } from "./player-form"
-import { PlayerList } from "./player-list"
-import { usePlayersQuery } from "@/src/hooks/use-players"
-import { Users, Loader2 } from "lucide-react"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/src/components/ui/card";
+import { PlayerForm } from "./player-form";
+import { PlayerList } from "./player-list";
+import { usePlayersQuery } from "@/src/hooks/use-players";
+import { Users, Loader2 } from "lucide-react";
 
 export function PlayerManager() {
-  const { data: players = [], isLoading, error } = usePlayersQuery()
+  const { data: players = [], isLoading, error } = usePlayersQuery();
 
   if (isLoading) {
     return (
@@ -19,7 +25,7 @@ export function PlayerManager() {
           </CardContent>
         </Card>
       </div>
-    )
+    );
   }
 
   if (error) {
@@ -31,7 +37,7 @@ export function PlayerManager() {
           </CardContent>
         </Card>
       </div>
-    )
+    );
   }
 
   return (
@@ -42,7 +48,9 @@ export function PlayerManager() {
             <Users className="h-5 w-5" />
             Player Management
           </CardTitle>
-          <CardDescription>Register players and their team compositions</CardDescription>
+          <CardDescription>
+            Register players and their team compositions
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <PlayerForm />
@@ -51,5 +59,5 @@ export function PlayerManager() {
 
       <PlayerList players={players} />
     </div>
-  )
+  );
 }

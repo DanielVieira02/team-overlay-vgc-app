@@ -1,15 +1,30 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
-import { Button } from "@/src/components/ui/button"
-import { Badge } from "@/src/components/ui/badge"
-import type { Player } from "@/src/lib/types"
-import { useDeletePlayerMutation, useTeamDataQuery } from "@/src/hooks/use-players"
-import { Trash2, ExternalLink, Loader2, CheckCircle2, AlertCircle } from "lucide-react"
-import { useToast } from "@/src/hooks/use-toast"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/src/components/ui/card";
+import { Button } from "@/src/components/ui/button";
+import { Badge } from "@/src/components/ui/badge";
+import type { Player } from "@/src/lib/types";
+import {
+  useDeletePlayerMutation,
+  useTeamDataQuery,
+} from "@/src/hooks/use-players";
+import {
+  Trash2,
+  ExternalLink,
+  Loader2,
+  CheckCircle2,
+  AlertCircle,
+} from "lucide-react";
+import { useToast } from "@/src/hooks/use-toast";
 
 function TeamDataBadge({ teamUrl }: { teamUrl: string }) {
-  const { isLoading, isError, isSuccess } = useTeamDataQuery(teamUrl)
+  const { isLoading, isError, isSuccess } = useTeamDataQuery(teamUrl);
 
   if (isLoading) {
     return (
@@ -17,7 +32,7 @@ function TeamDataBadge({ teamUrl }: { teamUrl: string }) {
         <Loader2 className="h-3 w-3 mr-1 animate-spin" />
         Loading
       </Badge>
-    )
+    );
   }
 
   if (isError) {
@@ -26,28 +41,31 @@ function TeamDataBadge({ teamUrl }: { teamUrl: string }) {
         <AlertCircle className="h-3 w-3 mr-1" />
         Error
       </Badge>
-    )
+    );
   }
 
   if (isSuccess) {
     return (
-      <Badge variant="default" className="text-xs bg-green-600 hover:bg-green-700">
+      <Badge
+        variant="default"
+        className="text-xs bg-green-600 hover:bg-green-700"
+      >
         <CheckCircle2 className="h-3 w-3 mr-1" />
         Loaded
       </Badge>
-    )
+    );
   }
 
-  return null
+  return null;
 }
 
 interface PlayerListProps {
-  players: Player[]
+  players: Player[];
 }
 
 export function PlayerList({ players }: PlayerListProps) {
-  const { toast } = useToast()
-  const deletePlayerMutation = useDeletePlayerMutation()
+  const { toast } = useToast();
+  const deletePlayerMutation = useDeletePlayerMutation();
 
   const handleDelete = (id: string, name: string) => {
     deletePlayerMutation.mutate(id, {
@@ -55,18 +73,18 @@ export function PlayerList({ players }: PlayerListProps) {
         toast({
           title: "Player Removed",
           description: `${name} has been removed`,
-        })
+        });
       },
       onError: (error) => {
         toast({
           title: "Error",
           description: "Failed to remove player. Please try again.",
           variant: "destructive",
-        })
-        console.error('Error removing player:', error)
+        });
+        console.error("Error removing player:", error);
       },
-    })
-  }
+    });
+  };
 
   if (players.length === 0) {
     return (
@@ -75,7 +93,7 @@ export function PlayerList({ players }: PlayerListProps) {
           <p className="text-muted-foreground">No players registered yet</p>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
@@ -83,7 +101,8 @@ export function PlayerList({ players }: PlayerListProps) {
       <CardHeader>
         <CardTitle>Registered Players</CardTitle>
         <CardDescription>
-          {players.length} {players.length === 1 ? "player" : "players"} registered
+          {players.length} {players.length === 1 ? "player" : "players"}{" "}
+          registered
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -124,5 +143,5 @@ export function PlayerList({ players }: PlayerListProps) {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

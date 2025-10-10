@@ -1,17 +1,26 @@
-"use client"
+"use client";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
-import { OBSController } from "@/src/components/obs/obs-controller"
-import { PlayerManager } from "@/src/components/players/player-manager"
-import { TeamPreview } from "@/src/components/team-preview"
-import { Gamepad2, Users, Settings } from "lucide-react"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/src/components/ui/tabs";
+import { OBSController } from "@/src/components/obs/obs-controller";
+import { PlayerManager } from "@/src/components/players/player-manager";
+import { TeamPreview } from "@/src/components/team-preview";
+import { Gamepad2, Users, Settings } from "lucide-react";
 
 export function VGCOverlayApp() {
   return (
     <div className="container mx-auto py-8 px-4">
       <header className="mb-8">
-        <h1 className="text-4xl font-bold tracking-tight mb-2">VGC Team Overlay</h1>
-        <p className="text-muted-foreground text-lg">Professional Pokemon tournament overlay system for OBS</p>
+        <h1 className="text-4xl font-bold tracking-tight mb-2">
+          VGC Team Overlay
+        </h1>
+        <p className="text-muted-foreground text-lg">
+          Professional Pokemon tournament overlay system for OBS
+        </p>
       </header>
 
       <Tabs defaultValue="obs" className="w-full">
@@ -43,5 +52,5 @@ export function VGCOverlayApp() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }

@@ -1,64 +1,132 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
-import { Button } from "@/src/components/ui/button"
-import { Input } from "@/src/components/ui/input"
-import { Label } from "@/src/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/src/components/ui/select"
-import type { OBSConnection } from "@/src/lib/obs-connection"
-import { getPlayers } from "@/src/lib/player-storage"
-import { Monitor, ExternalLink } from "lucide-react"
-import { useToast } from "@/src/hooks/use-toast"
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/src/components/ui/card";
+import { Button } from "@/src/components/ui/button";
+import { Label } from "@/src/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/src/components/ui/select";
+import type { OBSConnection } from "@/src/lib/obs-connection";
+import { getPlayers } from "@/src/lib/player-storage";
+import { Monitor, RefreshCw } from "lucide-react";
+import { useToast } from "@/src/hooks/use-toast";
+import { useOBSState } from "@/src/hooks/use-obs-state";
 
 interface OBSSourceControllerProps {
-  connection: OBSConnection
-  sceneName: string
-  selectedSource?: string
-  onSelectSource: (source: string) => void
+  connection: OBSConnection;
 }
 
-export function OBSSourceController({
-  connection,
-  sceneName,
-  selectedSource,
-  onSelectSource,
-}: OBSSourceControllerProps) {
-  const [sources, setSources] = useState<any[]>([])
-  const [players, setPlayers] = useState(getPlayers())
-  const [selectedPlayer, setSelectedPlayer] = useState<string>()
-  const [customUrl, setCustomUrl] = useState("")
-  const { toast } = useToast()
+export function OBSSourceController({ connection }: OBSSourceControllerProps) {
+  const [players] = useState(getPlayers());
+  const { toast } = useToast();
 
-  useEffect(() => {
-    loadSources()
-  }, [sceneName])
+  const {
+    sources,
+    sourcesLoading,
+    sourcesError,
+    selectedScene,
+    updateSourceUrl,
+    isUpdatingUrl,
+    updateUrlError,
+    refetchSources,
+    setSourceAssignment,
+    getSceneAssignments,
+  } = useOBSState(connection);
 
-  const loadSources = async () => {
-    try {
-      const sourceList = await connection.getSources(sceneName)
-      setSources(sourceList)
-    } catch (error) {
-      console.error("[v0] Failed to load sources:", error)
-    }
+  // Get assignments for the current scene
+  const sceneAssignments = selectedScene
+    ? getSceneAssignments(selectedScene)
+    : {};
+
+  // Don't render if no scene is selected
+  if (!selectedScene) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Monitor className="h-5 w-5" />
+            Browser Sources
+          </CardTitle>
+          <CardDescription>
+            Select a scene first to configure sources
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    );
   }
 
-  const handleSetUrl = async (url: string) => {
-    if (!selectedSource) return
-    try {
-      await connection.setSourceUrl(selectedSource, url)
-      toast({
-        title: "URL Updated",
-        description: "Browser source URL has been updated",
-      })
-    } catch (error: any) {
-      toast({
-        title: "Update Failed",
-        description: error.message,
-        variant: "destructive",
-      })
+  const handlePlayerChange = (sourceName: string, playerId: string) => {
+    const player = players.find((p) => p.id === playerId);
+    if (player && selectedScene) {
+      // Update persistent state immediately for UI feedback
+      setSourceAssignment(selectedScene, sourceName, playerId);
+
+      updateSourceUrl(
+        { sourceName, url: player.teamUrl },
+        {
+          onSuccess: () => {
+            toast({
+              title: "Player Assigned",
+              description: `${player.name} assigned to ${sourceName}`,
+            });
+          },
+          onError: (error: any) => {
+            // Revert persistent state on error
+            setSourceAssignment(selectedScene, sourceName, undefined);
+            toast({
+              title: "Assignment Failed",
+              description: error.message || "Failed to assign player",
+              variant: "destructive",
+            });
+          },
+        },
+      );
     }
-  }
+  };
+
+  const clearSource = (sourceName: string) => {
+    if (!selectedScene) return;
+
+    // Get current assignment to restore on error
+    const currentPlayerId = sceneAssignments[sourceName];
+
+    // Update persistent state immediately for UI feedback
+    setSourceAssignment(selectedScene, sourceName, undefined);
+
+    updateSourceUrl(
+      { sourceName, url: "" },
+      {
+        onSuccess: () => {
+          toast({
+            title: "Source Cleared",
+            description: `${sourceName} has been cleared`,
+          });
+        },
+        onError: (error: any) => {
+          // Restore previous assignment on error
+          if (currentPlayerId) {
+            setSourceAssignment(selectedScene, sourceName, currentPlayerId);
+          }
+          toast({
+            title: "Clear Failed",
+            description: error.message || "Failed to clear source",
+            variant: "destructive",
+          });
+        },
+      },
+    );
+  };
 
   return (
     <Card>
@@ -66,80 +134,97 @@ export function OBSSourceController({
         <CardTitle className="flex items-center gap-2">
           <Monitor className="h-5 w-5" />
           Browser Sources
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => refetchSources()}
+            disabled={sourcesLoading}
+          >
+            <RefreshCw
+              className={`h-4 w-4 ${sourcesLoading ? "animate-spin" : ""}`}
+            />
+          </Button>
         </CardTitle>
-        <CardDescription>Configure browser source URLs for team overlays</CardDescription>
+        <CardDescription>
+          Assign players to browser sources in {selectedScene}
+        </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <Label>Select Source</Label>
-          <Select value={selectedSource} onValueChange={onSelectSource}>
-            <SelectTrigger>
-              <SelectValue placeholder="Choose a browser source" />
-            </SelectTrigger>
-            <SelectContent>
-              {sources.map((source) => (
-                <SelectItem key={source.sourceName} value={source.sourceName}>
-                  {source.sourceName}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        {sourcesError && (
+          <div className="text-sm text-destructive">
+            Failed to load sources: {sourcesError.message}
+          </div>
+        )}
 
-        {selectedSource && (
-          <>
-            <div className="space-y-2">
-              <Label>Select Player Team</Label>
-              <Select value={selectedPlayer} onValueChange={setSelectedPlayer}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Choose a player" />
-                </SelectTrigger>
-                <SelectContent>
-                  {players.map((player) => (
-                    <SelectItem key={player.id} value={player.id}>
-                      {player.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              {selectedPlayer && (
-                <Button
-                  className="w-full"
-                  onClick={() => {
-                    const player = players.find((p) => p.id === selectedPlayer)
-                    if (player) handleSetUrl(player.teamUrl)
-                  }}
+        {updateUrlError && (
+          <div className="text-sm text-destructive">
+            Error: {updateUrlError.message}
+          </div>
+        )}
+
+        {sourcesLoading ? (
+          <div className="text-sm text-muted-foreground">
+            Loading sources...
+          </div>
+        ) : sources.length === 0 ? (
+          <div className="text-sm text-muted-foreground">
+            No browser sources found in this scene
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {sources.toSorted().map((source) => {
+              const assignedPlayerId = sceneAssignments[source.sourceName];
+              const assignedPlayer = assignedPlayerId
+                ? players.find((p) => p.id === assignedPlayerId)
+                : null;
+
+              return (
+                <div
+                  key={source.sourceName}
+                  className="border rounded-lg p-4 space-y-3"
                 >
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  Load Player Team
-                </Button>
-              )}
-            </div>
-
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">Or</span>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label>Custom URL</Label>
-              <div className="flex gap-2">
-                <Input
-                  type="url"
-                  placeholder="https://example.com/team"
-                  value={customUrl}
-                  onChange={(e) => setCustomUrl(e.target.value)}
-                />
-                <Button onClick={() => handleSetUrl(customUrl)}>Set URL</Button>
-              </div>
-            </div>
-          </>
+                  <div className="flex items-center gap-4">
+                    <div>
+                      <h4 className="font-medium w-max">{source.sourceName}</h4>
+                    </div>
+                    <Select
+                      value={sceneAssignments[source.sourceName] || ""}
+                      onValueChange={(playerId) =>
+                        handlePlayerChange(source.sourceName, playerId)
+                      }
+                      disabled={isUpdatingUrl}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue
+                          placeholder={
+                            isUpdatingUrl ? "Updating..." : "Select a player"
+                          }
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {players.map((player) => (
+                          <SelectItem key={player.id} value={player.id}>
+                            {player.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => clearSource(source.sourceName)}
+                      disabled={isUpdatingUrl || !assignedPlayer}
+                      className="text-muted-foreground hover:text-destructive"
+                    >
+                      Clear
+                    </Button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         )}
       </CardContent>
     </Card>
-  )
+  );
 }
