@@ -3,6 +3,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
 import { OBSController } from "@/src/components/obs/obs-controller"
 import { PlayerManager } from "@/src/components/players/player-manager"
+import { TeamPreview } from "@/src/components/team-preview"
 import { Gamepad2, Users, Settings } from "lucide-react"
 
 export function VGCOverlayApp() {
@@ -38,9 +39,7 @@ export function VGCOverlayApp() {
         </TabsContent>
 
         <TabsContent value="preview" className="space-y-4">
-          <div className="rounded-lg border bg-card p-8 text-center">
-            <p className="text-muted-foreground">Team preview will be displayed here</p>
-          </div>
+          <TeamPreview />
         </TabsContent>
       </Tabs>
     </div>

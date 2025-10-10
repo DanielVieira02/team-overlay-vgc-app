@@ -39,6 +39,7 @@
     "@rsbuild/core": "latest",
     "@rsbuild/plugin-react": "latest",
     "@tanstack/react-query": "latest",
+    "@tanstack/react-query-devtools": "^5.90.2",
     "autoprefixer": "^10.4.20",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

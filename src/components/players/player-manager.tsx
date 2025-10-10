@@ -1,26 +1,37 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
 import { PlayerForm } from "./player-form"
 import { PlayerList } from "./player-list"
-import { getPlayers } from "@/src/lib/player-storage"
-import type { Player } from "@/src/lib/types"
-import { Users } from "lucide-react"
+import { usePlayersQuery } from "@/src/hooks/use-players"
+import { Users, Loader2 } from "lucide-react"
 
 export function PlayerManager() {
-  const [players, setPlayers] = useState<Player[]>([])
+  const { data: players = [], isLoading, error } = usePlayersQuery()
 
-  useEffect(() => {
-    setPlayers(getPlayers())
-  }, [])
-
-  const handlePlayerAdded = () => {
-    setPlayers(getPlayers())
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <Card>
+          <CardContent className="py-8 text-center">
+            <Loader2 className="h-6 w-6 animate-spin mx-auto mb-2" />
+            <p className="text-muted-foreground">Loading players...</p>
+          </CardContent>
+        </Card>
+      </div>
+    )
   }
 
-  const handlePlayerDeleted = () => {
-    setPlayers(getPlayers())
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <Card>
+          <CardContent className="py-8 text-center">
+            <p className="text-destructive">Error loading players</p>
+          </CardContent>
+        </Card>
+      </div>
+    )
   }
 
   return (
@@ -34,11 +45,11 @@ export function PlayerManager() {
           <CardDescription>Register players and their team compositions</CardDescription>
         </CardHeader>
         <CardContent>
-          <PlayerForm onPlayerAdded={handlePlayerAdded} />
+          <PlayerForm />
         </CardContent>
       </Card>
 
-      <PlayerList players={players} onPlayerDeleted={handlePlayerDeleted} />
+      <PlayerList players={players} />
     </div>
   )
 }

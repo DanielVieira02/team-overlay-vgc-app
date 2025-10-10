@@ -4,24 +4,67 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src
 import { Button } from "@/src/components/ui/button"
 import { Badge } from "@/src/components/ui/badge"
 import type { Player } from "@/src/lib/types"
-import { deletePlayer } from "@/src/lib/player-storage"
-import { Trash2, ExternalLink } from "lucide-react"
+import { useDeletePlayerMutation, useTeamDataQuery } from "@/src/hooks/use-players"
+import { Trash2, ExternalLink, Loader2, CheckCircle2, AlertCircle } from "lucide-react"
 import { useToast } from "@/src/hooks/use-toast"
+
+function TeamDataBadge({ teamUrl }: { teamUrl: string }) {
+  const { isLoading, isError, isSuccess } = useTeamDataQuery(teamUrl)
+
+  if (isLoading) {
+    return (
+      <Badge variant="secondary" className="text-xs">
+        <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+        Loading
+      </Badge>
+    )
+  }
+
+  if (isError) {
+    return (
+      <Badge variant="destructive" className="text-xs">
+        <AlertCircle className="h-3 w-3 mr-1" />
+        Error
+      </Badge>
+    )
+  }
+
+  if (isSuccess) {
+    return (
+      <Badge variant="default" className="text-xs bg-green-600 hover:bg-green-700">
+        <CheckCircle2 className="h-3 w-3 mr-1" />
+        Loaded
+      </Badge>
+    )
+  }
+
+  return null
+}
 
 interface PlayerListProps {
   players: Player[]
-  onPlayerDeleted: () => void
 }
 
-export function PlayerList({ players, onPlayerDeleted }: PlayerListProps) {
+export function PlayerList({ players }: PlayerListProps) {
   const { toast } = useToast()
+  const deletePlayerMutation = useDeletePlayerMutation()
 
   const handleDelete = (id: string, name: string) => {
-    deletePlayer(id)
-    onPlayerDeleted()
-    toast({
-      title: "Player Removed",
-      description: `${name} has been removed`,
+    deletePlayerMutation.mutate(id, {
+      onSuccess: () => {
+        toast({
+          title: "Player Removed",
+          description: `${name} has been removed`,
+        })
+      },
+      onError: (error) => {
+        toast({
+          title: "Error",
+          description: "Failed to remove player. Please try again.",
+          variant: "destructive",
+        })
+        console.error('Error removing player:', error)
+      },
     })
   }
 
@@ -50,12 +93,13 @@ export function PlayerList({ players, onPlayerDeleted }: PlayerListProps) {
               key={player.id}
               className="flex items-center justify-between rounded-lg border bg-card p-4 hover:bg-accent/5 transition-colors"
             >
-              <div className="space-y-1">
+              <div className="space-y-1 flex-1">
                 <div className="flex items-center gap-2">
                   <h3 className="font-semibold">{player.name}</h3>
                   <Badge variant="outline" className="text-xs">
                     VGC
                   </Badge>
+                  <TeamDataBadge teamUrl={player.teamUrl} />
                 </div>
                 <a
                   href={player.teamUrl}

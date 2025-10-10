@@ -3,6 +3,15 @@ export interface Player {
   name: string
   teamUrl: string
   createdAt: Date
+  teamData?: TeamData
+}
+
+export interface TeamData {
+  title?: string
+  author?: string
+  format?: string
+  pokemon: Pokemon[]
+  rawData?: string
 }
 
 export interface Pokemon {
