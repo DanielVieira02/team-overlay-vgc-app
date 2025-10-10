@@ -18,7 +18,7 @@ function App() {
             <Route
               path="/teamlist/:pokepaste"
               element={<TeamPreviewOBSRenderer />}
-            ></Route>
+            />
           </Routes>
           <Toaster />
           <ReactQueryDevtools initialIsOpen={false} />

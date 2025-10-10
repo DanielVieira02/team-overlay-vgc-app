@@ -19,6 +19,7 @@ import {
 } from "@/src/components/ui/select";
 import type { OBSConnection } from "@/src/lib/obs-connection";
 import { getPlayers } from "@/src/lib/player-storage";
+import { convertToTeamlistUrl } from "@/src/lib/url-utils";
 import { Monitor, RefreshCw } from "lucide-react";
 import { useToast } from "@/src/hooks/use-toast";
 import { useOBSState } from "@/src/hooks/use-obs-state";
@@ -72,14 +73,18 @@ export function OBSSourceController({ connection }: OBSSourceControllerProps) {
       // Update persistent state immediately for UI feedback
       setSourceAssignment(selectedScene, sourceName, playerId);
 
+      // Convert pokepaste URL to app teamlist route
+      const appUrl = convertToTeamlistUrl(player.teamUrl);
+
       updateSourceUrl(
-        { sourceName, url: player.teamUrl },
+        { sourceName, url: appUrl },
         {
           onSuccess: () => {
             toast({
               title: "Player Assigned",
               description: `${player.name} assigned to ${sourceName}`,
             });
+            console.log(`Source ${sourceName} URL set to: ${appUrl}`);
           },
           onError: (error: any) => {
             // Revert persistent state on error
