@@ -1,24 +1,30 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
-import { Input } from "@/src/components/ui/input"
-import { Button } from "@/src/components/ui/button"
-import { Label } from "@/src/components/ui/label"
-import { useOBSConnection } from "@/src/hooks/use-obs-connection"
-import { Loader2, Wifi } from "lucide-react"
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/src/components/ui/card";
+import { Input } from "@/src/components/ui/input";
+import { Button } from "@/src/components/ui/button";
+import { Label } from "@/src/components/ui/label";
+import { useOBSConnection } from "@/src/hooks/use-obs-connection";
+import { Loader2, Wifi } from "lucide-react";
 
 export function OBSConnectionForm() {
-  const [url, setUrl] = useState("ws://localhost:4455")
-  const [password, setPassword] = useState("")
-  const { connect, isConnecting } = useOBSConnection()
+  const [url, setUrl] = useState("ws://localhost:4455");
+  const [password, setPassword] = useState("");
+  const { connect, isConnecting } = useOBSConnection();
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    await connect(url, password || undefined)
-  }
+    e.preventDefault();
+    await connect(url, password || undefined);
+  };
 
   return (
     <Card className="max-w-2xl">
@@ -27,7 +33,9 @@ export function OBSConnectionForm() {
           <Wifi className="h-5 w-5" />
           Connect to OBS
         </CardTitle>
-        <CardDescription>Enter your OBS WebSocket connection details to get started</CardDescription>
+        <CardDescription>
+          Enter your OBS WebSocket connection details to get started
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -67,5 +75,5 @@ export function OBSConnectionForm() {
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }

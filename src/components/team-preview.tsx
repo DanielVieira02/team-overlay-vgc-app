@@ -1,30 +1,50 @@
-"use client"
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
-import { Badge } from "@/src/components/ui/badge"
-import { Button } from "@/src/components/ui/button"
-import { usePlayersQuery, useTeamDataQuery } from "@/src/hooks/use-players"
-import { getPokemonIconPath, getItemIconPath } from "@/src/lib/asset-utils"
-import { Loader2, Users, ExternalLink, Sparkles, Zap, Shield } from "lucide-react"
-import type { Player, Pokemon } from "@/src/lib/types"
-import React from "react"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/src/components/ui/card";
+import { Badge } from "@/src/components/ui/badge";
+import { Button } from "@/src/components/ui/button";
+import { usePlayersQuery, useTeamDataQuery } from "@/src/hooks/use-players";
+import { getPokemonIconPath, getItemIconPath } from "@/src/lib/asset-utils";
+import {
+  Loader2,
+  Users,
+  ExternalLink,
+  Sparkles,
+  Zap,
+  Shield,
+} from "lucide-react";
+import type { Player, Pokemon } from "@/src/lib/types";
+import React from "react";
 
 function PokemonCard({ pokemon }: { pokemon: Pokemon }) {
-  const pokemonIcon = React.useMemo(() => getPokemonIconPath(pokemon.species), [pokemon.species])
-  const itemIcon = React.useMemo(() => getItemIconPath(pokemon.item), [pokemon.item])
+  const pokemonIcon = React.useMemo(
+    () => getPokemonIconPath(pokemon.species),
+    [pokemon.species],
+  );
+  const itemIcon = React.useMemo(
+    () => getItemIconPath(pokemon.item),
+    [pokemon.item],
+  );
 
   return (
     <Card className="h-full hover:shadow-lg transition-shadow duration-200">
       <CardHeader className="pb-3">
         <div className="flex items-center gap-3">
           <div className="relative">
-            <img 
-              src={pokemonIcon} 
+            <img
+              src={pokemonIcon}
               alt={pokemon.species}
               className="w-12 h-12 object-contain"
               onError={(e) => {
                 // Fallback to Pikachu if image fails to load
-                (e.target as HTMLImageElement).src = '/assets/PokeIcons/025_000.png'
+                (e.target as HTMLImageElement).src =
+                  "/assets/PokeIcons/025_000.png";
               }}
             />
             {pokemon.shiny && (
@@ -36,7 +56,9 @@ function PokemonCard({ pokemon }: { pokemon: Pokemon }) {
               {pokemon.name || pokemon.species}
             </CardTitle>
             {pokemon.name !== pokemon.species && (
-              <CardDescription className="truncate">{pokemon.species}</CardDescription>
+              <CardDescription className="truncate">
+                {pokemon.species}
+              </CardDescription>
             )}
             <div className="flex items-center gap-1 mt-1">
               {pokemon.level && pokemon.level !== 50 && (
@@ -53,19 +75,20 @@ function PokemonCard({ pokemon }: { pokemon: Pokemon }) {
           </div>
         </div>
       </CardHeader>
-      
+
       <CardContent className="space-y-4">
         {/* Item and Ability */}
         <div className="flex flex-wrap gap-2">
           {pokemon.item && (
             <div className="flex items-center gap-1 bg-secondary/50 rounded-md px-2 py-1">
               {itemIcon && (
-                <img 
-                  src={itemIcon} 
+                <img
+                  src={itemIcon}
                   alt={pokemon.item}
                   className="w-4 h-4 object-contain"
                   onError={(e) => {
-                    (e.target as HTMLImageElement).src = '/assets/ItemsIcons/0.png'
+                    (e.target as HTMLImageElement).src =
+                      "/assets/ItemsIcons/0.png";
                   }}
                 />
               )}
@@ -84,7 +107,10 @@ function PokemonCard({ pokemon }: { pokemon: Pokemon }) {
         {pokemon.teraType && (
           <div className="flex items-center gap-2">
             <Shield className="w-4 h-4 text-purple-600" />
-            <Badge variant="default" className="bg-purple-600 hover:bg-purple-700 text-xs">
+            <Badge
+              variant="default"
+              className="bg-purple-600 hover:bg-purple-700 text-xs"
+            >
               Tera {pokemon.teraType}
             </Badge>
           </div>
@@ -101,8 +127,8 @@ function PokemonCard({ pokemon }: { pokemon: Pokemon }) {
             </h4>
             <div className="grid gap-1">
               {pokemon.moves.slice(0, 4).map((move, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className="text-sm bg-muted/50 rounded px-2 py-1 truncate"
                   title={move}
                 >
@@ -119,7 +145,10 @@ function PokemonCard({ pokemon }: { pokemon: Pokemon }) {
             <h4 className="text-sm font-semibold mb-2">EVs</h4>
             <div className="grid grid-cols-2 gap-1 text-xs">
               {Object.entries(pokemon.evs).map(([stat, value]) => (
-                <div key={stat} className="flex justify-between bg-muted/30 rounded px-2 py-1">
+                <div
+                  key={stat}
+                  className="flex justify-between bg-muted/30 rounded px-2 py-1"
+                >
                   <span className="font-medium">{stat}:</span>
                   <span>{value}</span>
                 </div>
@@ -136,7 +165,10 @@ function PokemonCard({ pokemon }: { pokemon: Pokemon }) {
               {Object.entries(pokemon.ivs)
                 .filter(([_, value]) => value !== 31) // Only show non-perfect IVs
                 .map(([stat, value]) => (
-                  <div key={stat} className="flex justify-between bg-muted/30 rounded px-2 py-1">
+                  <div
+                    key={stat}
+                    className="flex justify-between bg-muted/30 rounded px-2 py-1"
+                  >
                     <span className="font-medium">{stat}:</span>
                     <span>{value}</span>
                   </div>
@@ -146,11 +178,16 @@ function PokemonCard({ pokemon }: { pokemon: Pokemon }) {
         )}
       </CardContent>
     </Card>
-  )
+  );
 }
 
 function TeamDisplay({ player }: { player: Player }) {
-  const { data: teamData, isLoading, isError, error } = useTeamDataQuery(player.teamUrl)
+  const {
+    data: teamData,
+    isLoading,
+    isError,
+    error,
+  } = useTeamDataQuery(player.teamUrl);
 
   if (isLoading) {
     return (
@@ -160,7 +197,7 @@ function TeamDisplay({ player }: { player: Player }) {
           <p className="text-muted-foreground">Loading team data...</p>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   if (isError) {
@@ -175,7 +212,7 @@ function TeamDisplay({ player }: { player: Player }) {
         <CardContent className="text-center py-8">
           <p className="text-destructive mb-2">Failed to load team data</p>
           <p className="text-sm text-muted-foreground mb-4">
-            {error?.message || 'Unknown error occurred'}
+            {error?.message || "Unknown error occurred"}
           </p>
           <Button variant="outline" size="sm" asChild>
             <a href={player.teamUrl} target="_blank" rel="noopener noreferrer">
@@ -185,11 +222,11 @@ function TeamDisplay({ player }: { player: Player }) {
           </Button>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   if (!teamData) {
-    return null
+    return null;
   }
 
   return (
@@ -210,34 +247,35 @@ function TeamDisplay({ player }: { player: Player }) {
                   {teamData.pokemon.length} Pokémon
                 </Badge>
                 {teamData.format && (
-                  <Badge variant="outline">
-                    {teamData.format}
-                  </Badge>
+                  <Badge variant="outline">{teamData.format}</Badge>
                 )}
                 {teamData.author && (
-                  <Badge variant="secondary">
-                    by {teamData.author}
-                  </Badge>
+                  <Badge variant="secondary">by {teamData.author}</Badge>
                 )}
               </div>
             </div>
             <div className="flex flex-col gap-2">
               <Button variant="outline" size="sm" asChild>
-                <a href={player.teamUrl} target="_blank" rel="noopener noreferrer">
+                <a
+                  href={player.teamUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <ExternalLink className="h-4 w-4 mr-2" />
                   View Original
                 </a>
               </Button>
               <div className="flex gap-1">
                 {teamData.pokemon.slice(0, 6).map((pokemon, index) => (
-                  <img 
+                  <img
                     key={index}
-                    src={getPokemonIconPath(pokemon.species)} 
+                    src={getPokemonIconPath(pokemon.species)}
                     alt={pokemon.species}
                     className="w-8 h-8 object-contain rounded border bg-white/50"
                     title={pokemon.species}
                     onError={(e) => {
-                      (e.target as HTMLImageElement).src = '/assets/PokeIcons/025_000.png'
+                      (e.target as HTMLImageElement).src =
+                        "/assets/PokeIcons/025_000.png";
                     }}
                   />
                 ))}
@@ -253,11 +291,11 @@ function TeamDisplay({ player }: { player: Player }) {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
 export function TeamPreview() {
-  const { data: players = [], isLoading, error } = usePlayersQuery()
+  const { data: players = [], isLoading, error } = usePlayersQuery();
 
   if (isLoading) {
     return (
@@ -269,7 +307,7 @@ export function TeamPreview() {
           </CardContent>
         </Card>
       </div>
-    )
+    );
   }
 
   if (error) {
@@ -281,7 +319,7 @@ export function TeamPreview() {
           </CardContent>
         </Card>
       </div>
-    )
+    );
   }
 
   if (players.length === 0) {
@@ -301,7 +339,7 @@ export function TeamPreview() {
           </div>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
@@ -315,7 +353,7 @@ export function TeamPreview() {
         </div>
         <Badge variant="outline" className="flex items-center gap-2">
           <Users className="h-4 w-4" />
-          {players.length} {players.length === 1 ? 'Player' : 'Players'}
+          {players.length} {players.length === 1 ? "Player" : "Players"}
         </Badge>
       </div>
 
@@ -323,5 +361,5 @@ export function TeamPreview() {
         <TeamDisplay key={player.id} player={player} />
       ))}
     </div>
-  )
+  );
 }

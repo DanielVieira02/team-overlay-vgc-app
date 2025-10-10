@@ -48,7 +48,7 @@ export function OBSConnectionProvider({ children }: { children: ReactNode }) {
         setIsConnecting(false);
       }
     },
-    [toast]
+    [toast],
   );
 
   const disconnect = useCallback(async () => {
@@ -70,7 +70,7 @@ export function OBSConnectionProvider({ children }: { children: ReactNode }) {
       connect,
       disconnect,
     }),
-    [connection, isConnecting, connect, disconnect]
+    [connection, isConnecting, connect, disconnect],
   );
 
   return (
@@ -85,7 +85,7 @@ export function useOBSConnection() {
 
   if (context === undefined) {
     throw new Error(
-      "useOBSConnection must be used within an OBSConnectionProvider"
+      "useOBSConnection must be used within an OBSConnectionProvider",
     );
   }
 
