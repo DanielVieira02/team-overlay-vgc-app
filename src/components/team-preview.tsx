@@ -7,11 +7,12 @@ import { usePlayersQuery, useTeamDataQuery } from "@/src/hooks/use-players"
 import { getPokemonIconPath, getItemIconPath } from "@/src/lib/asset-utils"
 import { Loader2, Users, ExternalLink, Sparkles, Zap, Shield } from "lucide-react"
 import type { Player, Pokemon } from "@/src/lib/types"
+import React from "react"
 
 function PokemonCard({ pokemon }: { pokemon: Pokemon }) {
-  const pokemonIcon = getPokemonIconPath(pokemon.species)
-  const itemIcon = pokemon.item ? getItemIconPath(pokemon.item) : null
-  
+  const pokemonIcon = React.useMemo(() => getPokemonIconPath(pokemon.species), [pokemon.species])
+  const itemIcon = React.useMemo(() => getItemIconPath(pokemon.item), [pokemon.item])
+
   return (
     <Card className="h-full hover:shadow-lg transition-shadow duration-200">
       <CardHeader className="pb-3">

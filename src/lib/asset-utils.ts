@@ -48,7 +48,7 @@ export function getPokemonIconPath(pokemonName: string): string {
   return '/assets/PokeIcons/025_000.png' // Pikachu as fallback
 }
 
-export function getItemIconPath(itemName: string): string {
+export function getItemIconPath(itemName?: string): string {
   if (!itemName) return '/assets/ItemsIcons/0.png'
   
   // Clean the item name
