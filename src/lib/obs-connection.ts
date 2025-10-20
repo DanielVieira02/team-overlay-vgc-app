@@ -49,6 +49,26 @@ export class OBSConnection {
     });
   }
 
+  async broadcastCustomEvent(eventName: string): Promise<void> {
+    if (!this.obs) throw new Error("Not connected to OBS");
+    console.log("Broadcasting Custom Event: ", eventName);
+    await this.obs.call("BroadcastCustomEvent", {
+      eventData: {
+        eventName,
+      },
+    });
+  }
+
+  addEventListener(event: string, handler: Function) {
+    if (!this.obs) throw new Error("Not connected to OBS");
+    this.obs.on(event, handler);
+  }
+
+  removeEventListener(event: string, handler: Function) {
+    if (!this.obs) throw new Error("Not connected to OBS");
+    this.obs.off(event, handler);
+  }
+
   isConnected(): boolean {
     return this.obs !== null;
   }

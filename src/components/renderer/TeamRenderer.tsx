@@ -1,5 +1,5 @@
 import { TeamSlot } from "./TeamSlot";
-import { useTeamDataQuery, parsePokepasteData } from "@/src/hooks/use-players";
+import { useTeamDataQuery } from "@/src/hooks/use-players";
 import { Pokemon } from "@/src/lib/types";
 
 interface TeamRendererProps {
@@ -10,11 +10,9 @@ export const TeamRenderer = ({ pokepasteUrl }: TeamRendererProps) => {
   const {
     data: teamData,
     isLoading,
-    isError,
-    error,
   } = useTeamDataQuery(pokepasteUrl);
 
-  if (isLoading) return <div></div>;
+  if (isLoading || !teamData) return <div></div>;
 
   const team = teamData.pokemon;
 

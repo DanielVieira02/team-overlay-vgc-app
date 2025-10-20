@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -9,7 +9,6 @@ import {
   CardTitle,
 } from "@/src/components/ui/card";
 import { Button } from "@/src/components/ui/button";
-import { Label } from "@/src/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -20,7 +19,7 @@ import {
 import type { OBSConnection } from "@/src/lib/obs-connection";
 import { getPlayers } from "@/src/lib/player-storage";
 import { convertToTeamlistUrl } from "@/src/lib/url-utils";
-import { Monitor, RefreshCw } from "lucide-react";
+import { Eye, EyeClosed, Monitor, RefreshCw } from "lucide-react";
 import { useToast } from "@/src/hooks/use-toast";
 import { useOBSState } from "@/src/hooks/use-obs-state";
 
@@ -43,8 +42,9 @@ export function OBSSourceController({ connection }: OBSSourceControllerProps) {
     refetchSources,
     setSourceAssignment,
     getSceneAssignments,
+    broadcastCustomEvent,
   } = useOBSState(connection);
-
+  
   // Get assignments for the current scene
   const sceneAssignments = selectedScene
     ? getSceneAssignments(selectedScene)
@@ -139,6 +139,26 @@ export function OBSSourceController({ connection }: OBSSourceControllerProps) {
         <CardTitle className="flex items-center gap-2">
           <Monitor className="h-5 w-5" />
           Browser Sources
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => broadcastCustomEvent({ eventName: "ShowPokemonTeam" })}
+            disabled={sourcesLoading}
+          >
+            <Eye
+              className={`h-4 w-4 view`}
+            />
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => broadcastCustomEvent({ eventName: "HidePokemonTeam" })}
+            disabled={sourcesLoading}
+          >
+            <EyeClosed
+              className={`h-4 w-4 view`}
+            />
+          </Button>
           <Button
             variant="ghost"
             size="sm"
