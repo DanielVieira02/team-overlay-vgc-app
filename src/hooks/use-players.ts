@@ -6,7 +6,7 @@ import {
   deletePlayer,
   updatePlayer,
 } from "../lib/player-storage";
-import type { Player, TeamData } from "../lib/types";
+import type { Player } from "../lib/types";
 
 export const usePlayersQuery = () => {
   return useQuery({

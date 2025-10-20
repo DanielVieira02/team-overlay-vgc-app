@@ -1,6 +1,6 @@
 import { useParams } from "react-router";
 import { useOBSConnection } from "../hooks/use-obs-connection";
-import { TeamRendererController } from "./renderer/TeamRendererController";
+import { TeamRendererController } from "./renderer/team/TeamRendererController";
 import { useEffect } from "react";
 
 export function TeamPreviewOBSRenderer() {

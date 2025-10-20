@@ -131,6 +131,16 @@ export function useSelectedSource() {
   return [selectedSource, setSelectedSource] as const;
 }
 
+export function useSetPersistentData(connection: OBSConnection | null, slotName: string, slotValue: any) {
+  if (!connection) throw new Error("No OBS connection");
+  connection.setPersistentData(slotName, slotValue);
+}
+
+export async function useGetPersistentData(connection: OBSConnection | null, slotName: string) {
+  if (!connection) throw new Error("No OBS connection");
+  return await connection.getPersistentData(slotName);
+}
+
 // Persistent source assignments across scenes
 export function useSourceAssignments() {
   const queryClient = useQueryClient();
@@ -198,6 +208,9 @@ export function useOBSState(connection: OBSConnection | null) {
   const addEventListener = useAddEventListener;
   const removeEventListener = useRemoveEventListener;
 
+  const setPersistentData = useSetPersistentData;
+  const getPersistentData = useGetPersistentData;
+
   return {
     // Data
     scenes: scenesQuery.data ?? [],
@@ -234,5 +247,7 @@ export function useOBSState(connection: OBSConnection | null) {
 
     addEventListener: addEventListener,
     removeEventListener: removeEventListener,
+    setPersistentData,
+    getPersistentData,
   };
 }

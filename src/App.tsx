@@ -7,6 +7,7 @@ import { Toaster } from "./components/ui/toaster";
 import { BrowserRouter, Route, Routes } from "react-router";
 import { TeamPreviewOBSRenderer } from "./components/team-preview-obs-renderer";
 import { OBSConnectionProvider } from "./hooks/use-obs-connection";
+import { BattleOverlayRenderer } from "./components/renderer/battle/BattleOverlayRenderer";
 
 function App() {
   return (
@@ -18,6 +19,10 @@ function App() {
             <Route
               path="/teamlist/:pokepaste"
               element={<TeamPreviewOBSRenderer />}
+            />
+            <Route 
+              path="/battle/"
+              element={<BattleOverlayRenderer />}
             />
           </Routes>
           <Toaster />

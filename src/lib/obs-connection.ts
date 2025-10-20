@@ -49,6 +49,23 @@ export class OBSConnection {
     });
   }
 
+  async setPersistentData(slotName: string, slotValue: any): Promise<void> {
+    if (!this.obs) throw new Error("Not connected to OBS");
+    await this.obs.call("SetPersistentData", {
+      realm: "OBS_WEBSOCKET_DATA_REALM_GLOBAL",
+      slotName,
+      slotValue,
+    });
+  }
+
+  async getPersistentData(slotName: string): Promise<any> {
+    if (!this.obs) throw new Error("Not connected to OBS");
+    return await this.obs.call("GetPersistentData", {
+      realm: "OBS_WEBSOCKET_DATA_REALM_GLOBAL",
+      slotName,
+    });
+  }
+
   async broadcastCustomEvent(eventName: string): Promise<void> {
     if (!this.obs) throw new Error("Not connected to OBS");
     console.log("Broadcasting Custom Event: ", eventName);
