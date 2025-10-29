@@ -4,28 +4,39 @@ import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card"
 import { BattleManagerTeamPanel } from "./BattleManagerTeamPanel"
 import { OBSConnection } from "@/src/lib/obs-connection"
 import { useOBSState } from "@/src/hooks/use-obs-state"
+import { usePlayersQuery } from "@/src/hooks/use-players"
 
 interface BattleManagerPlayerCardProps {
     connection: OBSConnection,
     player?: Player,
-    playerIdentifier?: string,
     setPlayer: any,
     header?: string,
+    bottom?: boolean,
 }
 
 export const BattleManagerPlayerCard = ({
     connection,
     player,
-    playerIdentifier,
     setPlayer,
-    header
+    header,
+    bottom,
 }: BattleManagerPlayerCardProps) => {
-    const { setPersistentData } = useOBSState(connection);
+    const { setPersistentData, broadcastCustomEvent } = useOBSState(connection);
+    const { data: players = [] } = usePlayersQuery();
 
-    const handleSetPlayer = (player: string) => {
-        if(playerIdentifier)
-            setPersistentData(connection, playerIdentifier, player);
-        setPlayer(player);
+    const handleSetPlayer = (player: string | undefined) => {
+        const foundPlayer = players.find((p) => p.id === player);
+
+        setPersistentData(connection, bottom ? "bottom_player" : "top_player", foundPlayer?.name);
+        setPlayer(player);        
+
+        broadcastCustomEvent({
+            eventData: {
+                eventName: "SetBattlePlayer",
+                player: foundPlayer ? foundPlayer.name : undefined,
+                bottom: bottom ? bottom : false,
+            },
+        })
     }
 
     return (
@@ -45,7 +56,9 @@ export const BattleManagerPlayerCard = ({
                 <div>
                     {player &&
                     <BattleManagerTeamPanel
+                        connection={connection}
                         teamUrl={player?.teamUrl}
+                        bottom={bottom}
                     />
                     }
                 </div>

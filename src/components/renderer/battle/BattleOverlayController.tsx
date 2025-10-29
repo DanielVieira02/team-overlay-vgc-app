@@ -1,25 +1,31 @@
 import { useEffect, useState } from "react";
 import { OBSConnection } from "@/src/lib/obs-connection";
 import { useOBSState } from "@/src/hooks/use-obs-state";
-import { BattleOverlay } from "./BattleOverlay";
+import { BattleOverlayRenderer } from "./BattleOverlayRenderer";
 
 interface OBSSourceControllerProps {
   connection: OBSConnection | null;
-  pokepaste: string | undefined;
+  pokepaste?: string;
 }
 
 export function BattleOverlayController({ connection }: OBSSourceControllerProps) {    
   const {
     addEventListener,
     removeEventListener,
+    getPersistentData,
   } = useOBSState(connection);
+  const [ overlayActive, setOverlayActive ] = useState<boolean>(false);
 
-  const handleCustomEvent = (eventData: any) => {
+  const handleCustomEvent = async (eventData: any) => {
     const eventName = eventData.eventName;
 
     switch(eventName) {
-        default:
-            break;
+      case "UpdateBattleStatus":
+        const { slotValue } = await getPersistentData(connection, "show_battle_overlay");
+        setOverlayActive(slotValue.show);
+        break;
+      default:
+        break;
     }
   }
 
@@ -29,10 +35,18 @@ export function BattleOverlayController({ connection }: OBSSourceControllerProps
         removeEventListener(connection, "CustomEvent", handleCustomEvent);
     };
   })
+
+  useEffect(() => {
+    getPersistentData(connection, "show_battle_overlay").then((result) => {
+      setOverlayActive(result.slotValue.show);
+    })
+  }, [connection])
   
   return (
-    <div>
-        <BattleOverlay />
+    <div className={`transition-all duration-1000 ${overlayActive ? "opacity-100" : "opacity-0"}`}>
+        <BattleOverlayRenderer 
+          connection={connection}
+        />
     </div>
   );
 }

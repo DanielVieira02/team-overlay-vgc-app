@@ -66,13 +66,11 @@ export class OBSConnection {
     });
   }
 
-  async broadcastCustomEvent(eventName: string): Promise<void> {
+  async broadcastCustomEvent(eventData: any): Promise<void> {
     if (!this.obs) throw new Error("Not connected to OBS");
-    console.log("Broadcasting Custom Event: ", eventName);
+    console.log("Broadcasting Custom Event: ", eventData.eventName);
     await this.obs.call("BroadcastCustomEvent", {
-      eventData: {
-        eventName,
-      },
+      eventData,
     });
   }
 

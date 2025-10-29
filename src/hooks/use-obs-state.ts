@@ -70,12 +70,12 @@ export function useUpdateSourceUrl(connection: OBSConnection | null) {
 export function useBroadcastCustomEvent(connection: OBSConnection | null) {
   return useMutation({
     mutationFn: async ({
-      eventName,
+      eventData,
     }: {
-      eventName: string;
+      eventData: any;
     }) => {
       if (!connection) throw new Error("No OBS connection");
-      return await connection.broadcastCustomEvent(eventName);
+      return await connection.broadcastCustomEvent(eventData);
     }
   });
 }

@@ -7,7 +7,7 @@ import { Toaster } from "./components/ui/toaster";
 import { BrowserRouter, Route, Routes } from "react-router";
 import { TeamPreviewOBSRenderer } from "./components/team-preview-obs-renderer";
 import { OBSConnectionProvider } from "./hooks/use-obs-connection";
-import { BattleOverlayRenderer } from "./components/renderer/battle/BattleOverlayRenderer";
+import { BattleOverlayOBSRenderer } from "./components/battle-overlay-obs-renderer";
 
 function App() {
   return (
@@ -22,7 +22,7 @@ function App() {
             />
             <Route 
               path="/battle/"
-              element={<BattleOverlayRenderer />}
+              element={<BattleOverlayOBSRenderer />}
             />
           </Routes>
           <Toaster />

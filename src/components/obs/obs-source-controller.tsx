@@ -142,7 +142,7 @@ export function OBSSourceController({ connection }: OBSSourceControllerProps) {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => broadcastCustomEvent({ eventName: "ShowPokemonTeam" })}
+            onClick={() => broadcastCustomEvent({ eventData: { eventName: "ShowPokemonTeam" }})}
             disabled={sourcesLoading}
           >
             <Eye
@@ -152,7 +152,7 @@ export function OBSSourceController({ connection }: OBSSourceControllerProps) {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => broadcastCustomEvent({ eventName: "HidePokemonTeam" })}
+            onClick={() => broadcastCustomEvent({ eventData: { eventName: "HidePokemonTeam" }})}
             disabled={sourcesLoading}
           >
             <EyeClosed
