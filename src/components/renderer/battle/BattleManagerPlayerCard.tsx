@@ -5,6 +5,7 @@ import { BattleManagerTeamPanel } from "./BattleManagerTeamPanel"
 import { OBSConnection } from "@/src/lib/obs-connection"
 import { useOBSState } from "@/src/hooks/use-obs-state"
 import { usePlayersQuery } from "@/src/hooks/use-players"
+import { useOBSBattleData } from "@/src/hooks/use-obs-battle-data"
 
 interface BattleManagerPlayerCardProps {
     connection: OBSConnection,
@@ -22,13 +23,18 @@ export const BattleManagerPlayerCard = ({
     bottom,
 }: BattleManagerPlayerCardProps) => {
     const { setPersistentData, broadcastCustomEvent } = useOBSState(connection);
+    const { battleStateData, battleStateLoading } = useOBSBattleData(connection, bottom);
     const { data: players = [] } = usePlayersQuery();
+
+    if (battleStateLoading) {
+        return (<></>);
+    }
 
     const handleSetPlayer = (player: string | undefined) => {
         const foundPlayer = players.find((p) => p.id === player);
 
         setPersistentData(connection, bottom ? "bottom_player" : "top_player", foundPlayer?.name);
-        setPlayer(player);        
+        setPlayer(player);
 
         broadcastCustomEvent({
             eventData: {

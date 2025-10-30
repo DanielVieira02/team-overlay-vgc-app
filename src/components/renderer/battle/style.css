@@ -5,10 +5,26 @@
     url(../../../assets/Fonts/NotoSans-ExtraBold.ttf) format("truetype");
 }
 
+@font-face {
+  font-family: "Oxanium";
+  src:
+    local("Oxanium"),
+    url(../../../assets/Fonts/Oxanium-VariableFont.ttf) format("truetype");
+}
+
 :root {
   --body-color: #39245b;
   --primary-color: #ffffff;
   --secondary-color: #007aa3;
+}
+
+.scoreText {
+  font-family: "Oxanium";
+  font-weight: bold;
+  font-size: 72;
+  fill: var(--primary-color);
+  text-anchor: middle;
+  text-transform: uppercase;
 }
 
 .battleOverlayContainer {
@@ -111,9 +127,9 @@
   opacity: 50%;
 }
 
-.itemIcon {
-  width: 64px;
-  height: 64px;
+.battleItemIcon {
+  width: 48px;
+  height: 48px;
 }
 
 .typeIcon {

@@ -16,13 +16,14 @@ export function BattleOverlayController({ connection }: OBSSourceControllerProps
   } = useOBSState(connection);
   const [ overlayActive, setOverlayActive ] = useState<boolean>(false);
 
-  const handleCustomEvent = async (eventData: any) => {
+  const handleCustomEvent = (eventData: any) => {
     const eventName = eventData.eventName;
 
     switch(eventName) {
       case "UpdateBattleStatus":
-        const { slotValue } = await getPersistentData(connection, "show_battle_overlay");
-        setOverlayActive(slotValue.show);
+        getPersistentData(connection, "show_battle_overlay").then((result) => {
+          setOverlayActive(result.show);
+        })
         break;
       default:
         break;
@@ -38,7 +39,7 @@ export function BattleOverlayController({ connection }: OBSSourceControllerProps
 
   useEffect(() => {
     getPersistentData(connection, "show_battle_overlay").then((result) => {
-      setOverlayActive(result.slotValue.show);
+      setOverlayActive(result.show);
     })
   }, [connection])
   

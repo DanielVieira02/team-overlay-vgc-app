@@ -26,10 +26,10 @@ export const BattleOverlayRenderer = ({
 
     useEffect(() => {
         getPersistentData(connection, "top_player").then((result) => {
-            setTopPlayer(result.slotValue);
+            setTopPlayer(result);
         });
         getPersistentData(connection, "bottom_player").then((result) => {
-            setBottomPlayer(result.slotValue);
+            setBottomPlayer(result);
         });
     }, [connection]);
 
@@ -64,6 +64,7 @@ export const BattleOverlayRenderer = ({
                     />
                     <BattleOverlayPokemonContainer 
                         connection={connection}
+                        score={1}
                     />
                 </g>
                 <g 

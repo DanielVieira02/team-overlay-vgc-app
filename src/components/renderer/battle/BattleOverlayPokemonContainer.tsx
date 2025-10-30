@@ -7,41 +7,50 @@ import { useEffect, useState } from "react";
 interface BattleOverlayPokemonContainerProps {
     connection: OBSConnection | null,
     bottom?: boolean,
+    score?: number,
 }
 
 interface PokemonSlot {
     species: string | undefined,
+    item: string | undefined,
     active: boolean,
     fainted?: boolean,
 }
 
+const initialActivePokemon = [
+    {
+        species: undefined,
+        item: undefined,
+        active: false,
+        fainted: false,
+    },
+    {
+        species: undefined,
+        item: undefined,
+        active: false,
+        fainted: false,
+    },
+    {
+        species: undefined,
+        item: undefined,
+        active: false,
+        fainted: false,
+    },
+    {
+        species: undefined,
+        item: undefined,
+        active: false,
+        fainted: false,
+    },
+];
+
 export const BattleOverlayPokemonContainer = ({
     connection,
     bottom = false,
+    score = 0,
 }: BattleOverlayPokemonContainerProps) => {
     const [ addedPokemon, setAddedPokemon ] = useState<number>(0);
-    const [ activePokemon, setActivePokemon ] = useState<PokemonSlot[]>([
-        {
-            species: undefined,
-            active: false,
-            fainted: false,
-        },
-        {
-            species: undefined,
-            active: false,
-            fainted: false,
-        },
-        {
-            species: undefined,
-            active: false,
-            fainted: false,
-        },
-        {
-            species: undefined,
-            active: false,
-            fainted: false,
-        },
-    ]);
+    const [ activePokemon, setActivePokemon ] = useState<PokemonSlot[]>(initialActivePokemon);
 
     const {
         addEventListener,
@@ -53,12 +62,13 @@ export const BattleOverlayPokemonContainer = ({
     
         switch(eventName) {
             case "BattlePokemonActive":
-                const { pokemonSpecies, bottom: isBottomPlayer } = eventData;
+                const { pokemonSpecies, item, bottom: isBottomPlayer } = eventData;
 
                 if (isBottomPlayer === bottom && addedPokemon < 4) {
                     const auxActivePokemon = activePokemon;
                     auxActivePokemon[addedPokemon] = {
                         species: pokemonSpecies,
+                        item,
                         active: true,
                         fainted: false,
                     };
@@ -71,15 +81,22 @@ export const BattleOverlayPokemonContainer = ({
                 const { pokemonIndex, bottom: isBottomPlayerFainted, fainted } = eventData;
 
                 if (isBottomPlayerFainted === bottom) {
-                    const auxActivePokemon = activePokemon;
-                    const auxPokemon = activePokemon[pokemonIndex];
-                    auxActivePokemon[pokemonIndex] = {
-                        species: auxPokemon.species,
-                        active: auxPokemon.active,
-                        fainted,
-                    };
+                    const auxActivePokemon = activePokemon.map((pokemon, index) => {
+                        if(index !== pokemonIndex) {
+                            return pokemon;
+                        }
+                        return {
+                            ...pokemon,
+                            fainted: fainted,
+                        };
+                    });
+                        
                     setActivePokemon(auxActivePokemon);
                 }
+                break;
+            case "ResetBattle":
+                setActivePokemon(initialActivePokemon.map((p) => p));
+                setAddedPokemon(0);
                 break;
             default:
                 break;
@@ -97,8 +114,15 @@ export const BattleOverlayPokemonContainer = ({
     "M -94 0 H 0 V -480 q -0 -4 -4 -10 c -16.6667 -16.6667 -33.3333 -33.3333 -50 -50 H -72 q -22 0 -22 22 V -490 Z" :
     "M 94 -0 H 0 V 480 q 0 4 4 10 c 16.6667 16.6667 33.3333 33.3333 50 50 H 72 q 22 -0 22 -22 V 490 Z";
     const slotsTransform = bottom ? 
-    "translate(-91, -480)" :
-    "translate(3,24)";
+    "translate(-91, -428)" :
+    "translate(3,4)";
+    const scoreCoords = bottom ?
+    {
+        x: -48, y: -450,
+    } :
+    {
+        x: 48, y: 490,
+    };
 
     return (
         <g>
@@ -106,6 +130,13 @@ export const BattleOverlayPokemonContainer = ({
                 className="battleOverlayContainer"
                 d={path}
             />
+            <text 
+                x={scoreCoords.x}
+                y={scoreCoords.y}
+                className="scoreText"
+            >
+                {score}
+            </text>
             <g
                 transform={slotsTransform}
             >
@@ -113,10 +144,11 @@ export const BattleOverlayPokemonContainer = ({
                     (
                         <g 
                             key={`${p}-${index}`}
-                            transform={`translate(0, ${index * 116})`}
+                            transform={`translate(0, ${index * 108})`}
                         >
                             <BattleOverlayPokemonStatus
                                 pokemon={p.species}
+                                item={p.item}
                                 active={p.active}
                                 fainted={p.fainted}
                             />

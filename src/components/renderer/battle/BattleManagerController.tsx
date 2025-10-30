@@ -5,6 +5,7 @@ import { Player } from "@/src/lib/types";
 import { BattleManagerPlayerCard } from "./BattleManagerPlayerCard";
 import { Button } from "../../ui/button";
 import { useOBSState } from "@/src/hooks/use-obs-state";
+import { useOBSBattleData } from "@/src/hooks/use-obs-battle-data";
 
 interface BattleManagerControllerProps {
     connection: OBSConnection,
@@ -14,6 +15,7 @@ export const BattleManagerController = ({
     connection,
 }: BattleManagerControllerProps) => {
     const { setPersistentData, getPersistentData, broadcastCustomEvent } = useOBSState(connection);
+    const { cleanActivePokemon } = useOBSBattleData(connection);
 
     const [ playerA, setPlayerA ] = useState<Player>();
     const [ playerB, setPlayerB ] = useState<Player>();
@@ -22,11 +24,11 @@ export const BattleManagerController = ({
 
     useEffect(() => {
         getPersistentData(connection, "top_player").then((result) => {
-            const player = players.find((player) => player.name === result.slotValue);
+            const player = players.find((player) => player.name === result);
             setPlayerA(player);
         })
         getPersistentData(connection, "bottom_player").then((result) => {
-            const player = players.find((player) => player.name === result.slotValue);
+            const player = players.find((player) => player.name === result);
             setPlayerB(player);
         })
     }, [players]);
@@ -55,6 +57,15 @@ export const BattleManagerController = ({
                     <p className="text-muted-foreground">
                         Manage the current battle on stream
                     </p>
+                    <Button
+                        onClick={() => {
+                            cleanActivePokemon();
+                            broadcastCustomEvent({ eventData: { eventName: "ResetBattle" }})
+                        }}
+                        variant="outline"
+                    >
+                        Reset battle
+                    </Button>
                     <Button
                         onClick={() => handleToggleOverlay(!showBattleOverlay)}
                         variant="outline"

@@ -2,15 +2,17 @@ import { useTeamDataQuery } from "@/src/hooks/use-players";
 import { Button } from "../../ui/button";
 import { Pokemon } from "@/src/lib/types";
 import { getPokemonIconPath } from "@/src/lib/asset-utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { OBSConnection } from "@/src/lib/obs-connection";
 import { useOBSState } from "@/src/hooks/use-obs-state";
+import { useOBSBattleData } from "@/src/hooks/use-obs-battle-data";
 
 const MAX_POKEMON_ON_BATTLE = 4;
 
 interface BattleManagerTeamPanelProps {
     connection: OBSConnection | null,
     teamUrl: string,
+    initialSelectedPokemon?: PokemonSlot[],
     bottom?: boolean,
 }
 
@@ -23,16 +25,23 @@ export const BattleManagerTeamPanel = ({
     connection,
     teamUrl,
     bottom = false,
+    initialSelectedPokemon = [],
 }: BattleManagerTeamPanelProps) => {
-    const [ selectedPokemon, setSelectedPokemon ] = useState<PokemonSlot[]>([]);
     const {
         data: teamData,
         isLoading,
     } = useTeamDataQuery(teamUrl);
     const {
         broadcastCustomEvent,
+        addEventListener,
+        removeEventListener,
     } = useOBSState(connection);
+    const { 
+        setActivePokemonBattle,
+        setIsPokemonFaintedBattle,
+    } = useOBSBattleData(connection);
 
+    const [ selectedPokemon, setSelectedPokemon ] = useState<PokemonSlot[]>(initialSelectedPokemon);
 
     if(isLoading && !teamData) {
         return (<></>);
@@ -40,18 +49,27 @@ export const BattleManagerTeamPanel = ({
 
     const team = teamData.pokemon;
 
-    const addPokemonToBattle = (pokemon: string) => {
+    const addPokemonToBattle = (pokemon: Pokemon) => {
         if(selectedPokemon.length >= MAX_POKEMON_ON_BATTLE)
             return;
         
         broadcastCustomEvent({
             eventData: {
                 eventName: "BattlePokemonActive",
-                pokemonSpecies: pokemon,
+                pokemonSpecies: pokemon.species,
+                item: pokemon.item ?? "",
                 bottom: bottom ? bottom : false,
             },
         });
-        setSelectedPokemon([...selectedPokemon, { pokemon, fainted: false}]);
+
+        setSelectedPokemon([...selectedPokemon, { pokemon: pokemon.species, fainted: false}]);
+        setActivePokemonBattle({
+            pokemon: pokemon.species,
+            item: pokemon.item ?? "",
+            fainted: false,
+            index: selectedPokemon.length - 1,
+            isBottomPlayer: bottom,
+        })
     }
 
     const togglePokemonFainted = (pokemonIndex: number, fainted: boolean) => {
@@ -70,7 +88,31 @@ export const BattleManagerTeamPanel = ({
         const auxSelectedPokemon = selectedPokemon;
         auxSelectedPokemon[pokemonIndex].fainted = fainted;
         setSelectedPokemon(auxSelectedPokemon);
+        setIsPokemonFaintedBattle({
+            pokemonIndex,
+            fainted,
+            isBottomPlayer: bottom
+        });
     }
+
+    const handleCustomEvent = (eventData: any) => {
+        const eventName = eventData.eventName;
+
+        switch(eventName) {
+            case "ResetBattle":
+                setSelectedPokemon([]);
+                break;
+            default:
+                break;
+        }
+    }
+
+    useEffect(() => {
+        addEventListener(connection, "CustomEvent", handleCustomEvent);
+        return () => {
+            removeEventListener(connection, "CustomEvent", handleCustomEvent);
+        };
+    });
 
     return (
         <div>
@@ -81,7 +123,7 @@ export const BattleManagerTeamPanel = ({
                         variant="outline"
                         key={pokemon.name}
                         onClick={() => {
-                            addPokemonToBattle(pokemon.name);
+                            addPokemonToBattle(pokemon);
                         }}
                         disabled={selectedPokemon.some((p) => p.pokemon === pokemon.name)}
                     >
