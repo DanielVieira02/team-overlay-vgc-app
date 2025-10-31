@@ -43,12 +43,10 @@ export function useBattleState(
             if (!connection)
                 return [];
             const result = await connection.getPersistentData(isBottomPlayer ? "bottom_pokemon" : "top_pokemon");
-            console.log(result);
             return result;
         },
         enabled: !!connection,
-        staleTime: 30000, // 30 seconds
-        refetchOnMount: true,
+        refetchOnMount: "always",
     })
 }
 
@@ -109,6 +107,5 @@ export function useOBSBattleData(connection: OBSConnection | null, bottom?: bool
         battleStateData: battleState.data,
         battleStateLoading: battleState.isLoading,
         battleStateError: battleState.error,
-
     };
 }

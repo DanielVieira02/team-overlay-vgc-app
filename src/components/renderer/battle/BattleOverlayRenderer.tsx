@@ -3,6 +3,8 @@ import { BattleOverlayPlayerInfo } from "./BattleOverlayPlayerInfo"
 import { BattleOverlayPokemonContainer } from "./BattleOverlayPokemonContainer"
 import { useOBSState } from "@/src/hooks/use-obs-state"
 import { useEffect, useState } from "react"
+import { useOBSBattleData } from "@/src/hooks/use-obs-battle-data"
+import { PokemonSlot } from "@/src/lib/types"
 
 interface BattleOverlayRendererProps {
     connection: OBSConnection | null,
@@ -15,23 +17,6 @@ export const BattleOverlayRenderer = ({
     const [ bottomPlayer, setBottomPlayer ] = useState<string>("");
 
     const { addEventListener, removeEventListener, getPersistentData } = useOBSState(connection);
-
-
-    useEffect(() => {
-        addEventListener(connection, "CustomEvent", handleCustomEvent);
-        return () => {
-            removeEventListener(connection, "CustomEvent", handleCustomEvent);
-        };
-    });
-
-    useEffect(() => {
-        getPersistentData(connection, "top_player").then((result) => {
-            setTopPlayer(result);
-        });
-        getPersistentData(connection, "bottom_player").then((result) => {
-            setBottomPlayer(result);
-        });
-    }, [connection]);
 
     const handleCustomEvent = async (eventData: any) => {
         const eventName = eventData.eventName;
@@ -48,10 +33,28 @@ export const BattleOverlayRenderer = ({
                 
                 setTopPlayer(playerName);
                 break;
+            case "ResetPokemon":            
+                break;
             default:
                 break;
         }
     }
+
+    useEffect(() => {
+        addEventListener(connection, "CustomEvent", handleCustomEvent);
+        return () => {
+            removeEventListener(connection, "CustomEvent", handleCustomEvent);
+        };
+    });
+
+    useEffect(() => {
+        getPersistentData(connection, "top_player").then((result) => {
+            setTopPlayer(result);
+        });
+        getPersistentData(connection, "bottom_player").then((result) => {
+            setBottomPlayer(result);
+        });
+    }, [connection]);
 
     return (
         <div>

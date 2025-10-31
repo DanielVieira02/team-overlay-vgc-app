@@ -43,6 +43,25 @@ export const BattleManagerTeamPanel = ({
 
     const [ selectedPokemon, setSelectedPokemon ] = useState<PokemonSlot[]>(initialSelectedPokemon);
 
+    const handleCustomEvent = (eventData: any) => {
+        const eventName = eventData.eventName;
+
+        switch(eventName) {
+            case "ResetBattle":
+                setSelectedPokemon([]);
+                break;
+            default:
+                break;
+        }
+    }
+
+    useEffect(() => {
+        addEventListener(connection, "CustomEvent", handleCustomEvent);
+        return () => {
+            removeEventListener(connection, "CustomEvent", handleCustomEvent);
+        };
+    });
+
     if(isLoading && !teamData) {
         return (<></>);
     }
@@ -94,25 +113,6 @@ export const BattleManagerTeamPanel = ({
             isBottomPlayer: bottom
         });
     }
-
-    const handleCustomEvent = (eventData: any) => {
-        const eventName = eventData.eventName;
-
-        switch(eventName) {
-            case "ResetBattle":
-                setSelectedPokemon([]);
-                break;
-            default:
-                break;
-        }
-    }
-
-    useEffect(() => {
-        addEventListener(connection, "CustomEvent", handleCustomEvent);
-        return () => {
-            removeEventListener(connection, "CustomEvent", handleCustomEvent);
-        };
-    });
 
     return (
         <div>

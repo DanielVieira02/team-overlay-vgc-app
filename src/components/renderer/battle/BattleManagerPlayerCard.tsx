@@ -43,6 +43,11 @@ export const BattleManagerPlayerCard = ({
                 bottom: bottom ? bottom : false,
             },
         })
+        broadcastCustomEvent({
+            eventData: {
+                eventName: "ResetBattle",
+            },
+        })
     }
 
     return (
@@ -65,6 +70,7 @@ export const BattleManagerPlayerCard = ({
                         connection={connection}
                         teamUrl={player?.teamUrl}
                         bottom={bottom}
+                        initialSelectedPokemon={battleStateData}
                     />
                     }
                 </div>
