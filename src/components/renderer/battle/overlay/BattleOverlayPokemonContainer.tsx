@@ -35,7 +35,7 @@ export const BattleOverlayPokemonContainer = ({
     "translate(-91, -428)" :
     "translate(3,4)";
 
-    let initialPokemonData = battleStateData ? 
+    let initialPokemonData = (battleStateData && battleStateData.pokemon) ?
         battleStateData.pokemon.map((p) => {
             return {
                 species: p.pokemon,
@@ -46,13 +46,15 @@ export const BattleOverlayPokemonContainer = ({
         })
     : [];
 
-    while (initialPokemonData.length < 4)
+    while (initialPokemonData.length < 4) {
         initialPokemonData.push({
             species: undefined,
             active: false,
             item: undefined,
             fainted: false,
         });
+    }
+
 
     return (
         <g>

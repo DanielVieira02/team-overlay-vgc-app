@@ -57,6 +57,7 @@ export function useBattleState(
         },
         enabled: !!connection,
         refetchOnMount: "always",
+        
     })
 }
 

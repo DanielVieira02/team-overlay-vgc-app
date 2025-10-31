@@ -42,7 +42,10 @@ export function BattleOverlayController({ connection }: OBSSourceControllerProps
 
   useEffect(() => {
     getPersistentData(connection, "show_battle_overlay").then((result) => {
-      setOverlayActive(result.show ?? false);
+      if (result !== null)
+        setOverlayActive(result.show);
+      else
+        setOverlayActive(false);
     })
   }, [connection])
 

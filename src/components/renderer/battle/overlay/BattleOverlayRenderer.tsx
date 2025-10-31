@@ -9,6 +9,10 @@ interface BattleOverlayRendererProps {
 export const BattleOverlayRenderer = ({
     connection
 }: BattleOverlayRendererProps) => {
+    if(!connection) {
+        return (<></>);
+    }
+
     return (
         <div>
             <svg width="1920px" height="1080px">

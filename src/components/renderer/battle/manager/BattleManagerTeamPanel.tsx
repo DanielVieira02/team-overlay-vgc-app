@@ -125,7 +125,7 @@ export const BattleManagerTeamPanel = ({
                         onClick={() => {
                             addPokemonToBattle(pokemon);
                         }}
-                        disabled={selectedPokemon.some((p) => p.pokemon === pokemon.name)}
+                        disabled={!selectedPokemon || selectedPokemon.some((p) => p.pokemon === pokemon.name)}
                     >
                         <img
                             src={getPokemonIconPath(pokemon.name)}
@@ -141,7 +141,7 @@ export const BattleManagerTeamPanel = ({
                 ))}
             </div>
             <div className="grid gap-6 md:grid-cols-4">
-                {selectedPokemon.map((pokemon: PokemonSlot, index: number) => (
+                {selectedPokemon?.map((pokemon: PokemonSlot, index: number) => (
                     <Button 
                         className="w-32 h-32"
                         variant="outline"
