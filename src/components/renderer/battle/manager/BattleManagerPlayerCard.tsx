@@ -1,11 +1,12 @@
 import { Player } from "@/src/lib/types"
-import { PlayerSelect } from "../../shared/PlayerSelect"
-import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card"
+import { PlayerSelect } from "../../../shared/PlayerSelect"
+import { Card, CardContent, CardHeader, CardTitle } from "../../../ui/card"
 import { BattleManagerTeamPanel } from "./BattleManagerTeamPanel"
 import { OBSConnection } from "@/src/lib/obs-connection"
 import { useOBSState } from "@/src/hooks/use-obs-state"
 import { usePlayersQuery } from "@/src/hooks/use-players"
 import { useOBSBattleData } from "@/src/hooks/use-obs-battle-data"
+import { BattleManagerPlayerScore } from "./BattleManagerPlayerScore"
 
 interface BattleManagerPlayerCardProps {
     connection: OBSConnection,
@@ -58,10 +59,15 @@ export const BattleManagerPlayerCard = ({
                 </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-                <div className="border rounded-lg p-4 space-y-3">
+                <div className="flex flex-row justify-between border rounded-lg p-4 space-y-3">
                     <PlayerSelect
                         defaultPlayer={player?.id}
                         onValueChange={handleSetPlayer}
+                    />
+                    <BattleManagerPlayerScore 
+                        connection={connection}
+                        bottom={bottom}
+                        initialScore={battleStateData?.score}
                     />
                 </div>
                 <div>
@@ -70,7 +76,7 @@ export const BattleManagerPlayerCard = ({
                         connection={connection}
                         teamUrl={player?.teamUrl}
                         bottom={bottom}
-                        initialSelectedPokemon={battleStateData}
+                        initialSelectedPokemon={battleStateData?.pokemon}
                     />
                     }
                 </div>

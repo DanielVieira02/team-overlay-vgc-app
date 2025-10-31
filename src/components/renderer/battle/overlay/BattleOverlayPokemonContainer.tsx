@@ -1,30 +1,31 @@
 import { OBSConnection } from "@/src/lib/obs-connection";
-import { BattleOverlayPokemonStatus } from "./BattleOverlayPokemonStatus";
 import "./style.css";
-import { useOBSState } from "@/src/hooks/use-obs-state";
-import { useEffect, useState } from "react";
-import { PokemonSlot } from "@/src/lib/types";
 import { BattleOverlayPokemonStatusList } from "./BattleOverlayPokemonStatusList";
 import { useOBSBattleData } from "@/src/hooks/use-obs-battle-data";
+import { BattleOverlayPlayerScore } from "./BattleOverlayPlayerScore";
 
 interface BattleOverlayPokemonContainerProps {
     connection: OBSConnection | null,
     bottom?: boolean,
-    score?: number,
 }
 
 export const BattleOverlayPokemonContainer = ({
     connection,
     bottom = false,
-    score = 0,
 }: BattleOverlayPokemonContainerProps) => {
     const {
         battleStateData,
         battleStateLoading,
+        battleStateError,
     } = useOBSBattleData(connection, bottom);
 
     if (battleStateLoading) {
         return(<></>);
+    }
+
+    if (battleStateError) {
+        console.log(battleStateError.message);
+        return (<></>)
     }
 
     const path = bottom ?
@@ -33,16 +34,9 @@ export const BattleOverlayPokemonContainer = ({
     const slotsTransform = bottom ? 
     "translate(-91, -428)" :
     "translate(3,4)";
-    const scoreCoords = bottom ?
-    {
-        x: -48, y: -450,
-    } :
-    {
-        x: 48, y: 490,
-    };
 
     let initialPokemonData = battleStateData ? 
-        battleStateData.map((p) => {
+        battleStateData.pokemon.map((p) => {
             return {
                 species: p.pokemon,
                 active: true,
@@ -66,13 +60,11 @@ export const BattleOverlayPokemonContainer = ({
                 className="battleOverlayContainer"
                 d={path}
             />
-            <text 
-                x={scoreCoords.x}
-                y={scoreCoords.y}
-                className="scoreText"
-            >
-                {score}
-            </text>
+            <BattleOverlayPlayerScore
+                connection={connection}
+                bottom={bottom}
+                initialScore={battleStateData?.score ?? 0}
+            />
             <g
                 transform={slotsTransform}
             >

@@ -1,6 +1,11 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { OBSConnection } from "../lib/obs-connection";
 
+interface BattleState {
+    pokemon: any[],
+    score: number,
+}
+
 export function useSetActivePokemonBattle(connection: OBSConnection | null) {
     return useMutation({
         mutationFn: async ({
@@ -39,11 +44,16 @@ export function useBattleState(
 ) {
     return useQuery({
         queryKey: ["battle-state", isBottomPlayer],
-        queryFn: async (): Promise<any[]> => {
+        queryFn: async (): Promise<BattleState | undefined> => {
             if (!connection)
-                return [];
-            const result = await connection.getPersistentData(isBottomPlayer ? "bottom_pokemon" : "top_pokemon");
-            return result;
+                return undefined;
+            const pokemon = await connection.getPersistentData(isBottomPlayer ? "bottom_pokemon" : "top_pokemon");
+            const score = await connection.getPersistentData(isBottomPlayer ? "bottom_score" : "top_score");
+
+            return {
+                pokemon,
+                score,
+            };
         },
         enabled: !!connection,
         refetchOnMount: "always",

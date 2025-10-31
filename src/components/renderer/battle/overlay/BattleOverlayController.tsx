@@ -22,7 +22,10 @@ export function BattleOverlayController({ connection }: OBSSourceControllerProps
     switch(eventName) {
       case "UpdateBattleStatus":
         getPersistentData(connection, "show_battle_overlay").then((result) => {
-          setOverlayActive(result.show);
+          if (result !== null)
+            setOverlayActive(result.show);
+          else
+            setOverlayActive(false);
         })
         break;
       default:
@@ -39,7 +42,7 @@ export function BattleOverlayController({ connection }: OBSSourceControllerProps
 
   useEffect(() => {
     getPersistentData(connection, "show_battle_overlay").then((result) => {
-      setOverlayActive(result.show);
+      setOverlayActive(result.show ?? false);
     })
   }, [connection])
 

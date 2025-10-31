@@ -10,7 +10,7 @@ import { OBSController } from "@/src/components/obs/obs-controller";
 import { PlayerManager } from "@/src/components/players/player-manager";
 import { TeamPreview } from "@/src/components/team-preview";
 import { Gamepad2, Users, Settings, Swords } from "lucide-react";
-import { BattleManager } from "./renderer/battle/BattleManager";
+import { BattleManager } from "./renderer/battle/manager/BattleManager";
 
 export function VGCOverlayApp() {
   return (

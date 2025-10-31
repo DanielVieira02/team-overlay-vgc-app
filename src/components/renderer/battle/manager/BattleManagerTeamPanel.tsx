@@ -1,5 +1,5 @@
 import { useTeamDataQuery } from "@/src/hooks/use-players";
-import { Button } from "../../ui/button";
+import { Button } from "../../../ui/button";
 import { Pokemon } from "@/src/lib/types";
 import { getPokemonIconPath } from "@/src/lib/asset-utils";
 import { useEffect, useState } from "react";

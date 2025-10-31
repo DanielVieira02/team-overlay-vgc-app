@@ -1,6 +1,6 @@
 import { useOBSConnection } from "../hooks/use-obs-connection";
 import { useEffect } from "react";
-import { BattleOverlayController } from "./renderer/battle/BattleOverlayController";
+import { BattleOverlayController } from "./renderer/battle/overlay/BattleOverlayController";
 
 export function BattleOverlayOBSRenderer() {
   const { connection, isConnected, connect, disconnect, isConnecting } = useOBSConnection();

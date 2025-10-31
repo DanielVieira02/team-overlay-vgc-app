@@ -3,7 +3,7 @@ import { usePlayersQuery } from "@/src/hooks/use-players";
 import { useEffect, useState } from "react";
 import { Player } from "@/src/lib/types";
 import { BattleManagerPlayerCard } from "./BattleManagerPlayerCard";
-import { Button } from "../../ui/button";
+import { Button } from "../../../ui/button";
 import { useOBSState } from "@/src/hooks/use-obs-state";
 import { useOBSBattleData } from "@/src/hooks/use-obs-battle-data";
 
@@ -25,11 +25,11 @@ export const BattleManagerController = ({
     useEffect(() => {
         getPersistentData(connection, "top_player").then((result) => {
             const player = players.find((player) => player.name === result);
-            setPlayerA(player);
+            setPlayerA(player ?? undefined);
         })
         getPersistentData(connection, "bottom_player").then((result) => {
             const player = players.find((player) => player.name === result);
-            setPlayerB(player);
+            setPlayerB(player ?? undefined);
         })
     }, [players]);
 

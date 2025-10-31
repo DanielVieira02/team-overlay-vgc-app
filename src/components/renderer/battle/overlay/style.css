@@ -2,14 +2,14 @@
   font-family: "NotoSans";
   src:
     local("NotoSans"),
-    url(../../../assets/Fonts/NotoSans-ExtraBold.ttf) format("truetype");
+    url(../../../../assets/Fonts/NotoSans-ExtraBold.ttf) format("truetype");
 }
 
 @font-face {
   font-family: "Oxanium";
   src:
     local("Oxanium"),
-    url(../../../assets/Fonts/Oxanium-VariableFont.ttf) format("truetype");
+    url(../../../../assets/Fonts/Oxanium-VariableFont.ttf) format("truetype");
 }
 
 :root {
