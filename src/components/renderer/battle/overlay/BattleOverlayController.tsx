@@ -54,7 +54,7 @@ export function BattleOverlayController({ connection }: OBSSourceControllerProps
   }
   
   return (
-    <div className={`transition-all duration-1000 ${overlayActive ? "opacity-100" : "opacity-0"}`}>
+    <div className={`${overlayActive ? "opacity-100" : "opacity-0"}`}>
         <BattleOverlayRenderer 
           connection={connection}
         />

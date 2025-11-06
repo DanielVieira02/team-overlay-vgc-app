@@ -34,11 +34,12 @@ export const BattleOverlayPokemonContainer = ({
     const slotsTransform = bottom ? 
     "translate(-91, -428)" :
     "translate(3,4)";
+    const groupClass = `battleOverlayContainerParent ${bottom ? "bottomContainer" : "topContainer"}`; 
 
     let initialPokemonData = (battleStateData && battleStateData.pokemon) ?
         battleStateData.pokemon.map((p) => {
             return {
-                species: p.pokemon,
+                species: p.species,
                 active: true,
                 item: p.item,
                 fainted: p.fainted,
@@ -55,9 +56,8 @@ export const BattleOverlayPokemonContainer = ({
         });
     }
 
-
     return (
-        <g>
+        <g className={groupClass}>
             <path
                 className="battleOverlayContainer"
                 d={path}

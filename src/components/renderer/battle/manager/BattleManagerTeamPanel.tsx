@@ -1,23 +1,25 @@
 import { useTeamDataQuery } from "@/src/hooks/use-players";
 import { Button } from "../../../ui/button";
-import { Pokemon } from "@/src/lib/types";
+import { Pokemon, PokemonSlot } from "@/src/lib/types";
 import { getPokemonIconPath } from "@/src/lib/asset-utils";
 import { useEffect, useState } from "react";
 import { OBSConnection } from "@/src/lib/obs-connection";
 import { useOBSState } from "@/src/hooks/use-obs-state";
 import { useOBSBattleData } from "@/src/hooks/use-obs-battle-data";
+import { BattleManagerPokemonController } from "./BattleManagerPokemonController";
 
 const MAX_POKEMON_ON_BATTLE = 4;
 
 interface BattleManagerTeamPanelProps {
     connection: OBSConnection | null,
     teamUrl: string,
-    initialSelectedPokemon?: PokemonSlot[],
+    initialSelectedPokemon?: PokemonSlotStatus[],
     bottom?: boolean,
 }
 
-interface PokemonSlot {
-    pokemon: string,
+interface PokemonSlotStatus {
+    species: string,
+    item: string | undefined,
     fainted: boolean,
 }
 
@@ -41,7 +43,7 @@ export const BattleManagerTeamPanel = ({
         setIsPokemonFaintedBattle,
     } = useOBSBattleData(connection);
 
-    const [ selectedPokemon, setSelectedPokemon ] = useState<PokemonSlot[]>(initialSelectedPokemon);
+    const [ selectedPokemon, setSelectedPokemon ] = useState<PokemonSlotStatus[]>(initialSelectedPokemon);
 
     const handleCustomEvent = (eventData: any) => {
         const eventName = eventData.eventName;
@@ -81,9 +83,9 @@ export const BattleManagerTeamPanel = ({
             },
         });
 
-        setSelectedPokemon([...selectedPokemon, { pokemon: pokemon.species, fainted: false}]);
+        setSelectedPokemon([...selectedPokemon, { species: pokemon.species, item: pokemon.item, fainted: false}]);
         setActivePokemonBattle({
-            pokemon: pokemon.species,
+            species: pokemon.species,
             item: pokemon.item ?? "",
             fainted: false,
             index: selectedPokemon.length - 1,
@@ -115,7 +117,7 @@ export const BattleManagerTeamPanel = ({
     }
 
     return (
-        <div>
+        <div className="space-y-4">
             <div className="grid gap-6 md:grid-cols-6">
                 {team.map((pokemon: Pokemon) => (
                     <Button 
@@ -125,7 +127,7 @@ export const BattleManagerTeamPanel = ({
                         onClick={() => {
                             addPokemonToBattle(pokemon);
                         }}
-                        disabled={!selectedPokemon || selectedPokemon.some((p) => p.pokemon === pokemon.name)}
+                        disabled={!selectedPokemon || selectedPokemon.some((p) => p.species === pokemon.name)}
                     >
                         <img
                             src={getPokemonIconPath(pokemon.name)}
@@ -140,27 +142,12 @@ export const BattleManagerTeamPanel = ({
                     </Button>
                 ))}
             </div>
-            <div className="grid gap-6 md:grid-cols-4">
-                {selectedPokemon?.map((pokemon: PokemonSlot, index: number) => (
-                    <Button 
-                        className="w-32 h-32"
-                        variant="outline"
-                        key={pokemon.pokemon}
-                        onClick={() => {
-                            togglePokemonFainted(index, !pokemon.fainted);
-                        }}
-                    >
-                        <img
-                            src={getPokemonIconPath(pokemon.pokemon)}
-                            alt={pokemon.pokemon}
-                            className={`w-24 h-24 object-contain ${pokemon.fainted ? "opacity-50" : "opacity-100"}`}
-                            onError={(e) => {
-                                // Fallback to Pikachu if image fails to load
-                                (e.target as HTMLImageElement).src =
-                                "/assets/PokeIcons/025_000.png";
-                            }}
-                        />
-                    </Button>
+            <div className="grid gap-2 grid-cols-2 space-y-2">
+                {selectedPokemon?.map((pokemon: PokemonSlotStatus, index: number) => (
+                    <BattleManagerPokemonController 
+                        pokemon={{ ...pokemon, item: undefined, active: true}}
+                        onToggleFainted={(fainted: boolean) => togglePokemonFainted(index, fainted)}
+                    />
                 ))}
             </div>
         </div>

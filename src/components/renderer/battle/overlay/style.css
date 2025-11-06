@@ -27,8 +27,34 @@
   text-transform: uppercase;
 }
 
+.battleOverlayContainerParent {
+  transform-box: fill-box;
+}
+
 .battleOverlayContainer {
   fill: var(--body-color);
+  transform-box: fill-box;
+}
+
+.bottomContainer {
+  transform-origin: bottom;
+}
+
+.topContainer {
+  transform-origin: top;
+}
+
+.battleOverlayHeader {
+  fill: var(--body-color);
+  transform-box: fill-box;
+}
+
+.bottomHeader {
+  transform-origin: left;
+}
+
+.topHeader {
+  transform-origin: right;
 }
 
 .battleOverlayPlayerNameBottom {
@@ -62,7 +88,6 @@
   text-anchor: end;
   text-transform: uppercase;
 }
-
 
 .teamSlotHeader {
   filter: drop-shadow(-10px 8px 4px #000029);
@@ -119,38 +144,57 @@
 .battleOverlayPokemonIcon {
   width: 88px;
   height: 88px;
+  transform-origin: center;
+  transform-box: fill-box;
 }
 
-.battleOverlayPokemonIconFainted {
-  width: 88px;
-  height: 88px;
-  opacity: 50%;
+.active {
+  animation: show-pokemon 1s;
+}
+
+.hidePokeball {
+  animation: hide-pokeball 1s forwards;
+}
+
+.fainted {
+  animation: pokemon-fainted 1s forwards;
 }
 
 .battleItemIcon {
   width: 48px;
   height: 48px;
+  transform-origin: center;
+  transform-box: fill-box;
 }
 
-.typeIcon {
-  width: 76px;
-  height: 76px;
-  position-anchor: middle;
+@keyframes show-pokemon
+{
+    0% {
+      transform: scale(0, 0);
+    }
+    50% {
+      transform: scale(0, 0);
+    }
+    100% {
+      transform: scale(1, 1);
+    }
 }
 
-.teraTypeIcon {
-  width: 124px;
-  height: 124px;
-  position-anchor: middle;
+@keyframes hide-pokeball
+{
+  0%   { transform: translate(1px, 1px) rotate(0deg); }
+  10%  { transform: translate(-1px, -2px) rotate(-1deg); }
+  20%  { transform: translate(-3px, 0px) rotate(1deg); }
+  30%  { transform: translate(3px, 2px) rotate(0deg); }
+  40%  { transform: translate(1px, -1px) rotate(1deg); }
+  50%  { transform: translate(-1px, 2px) rotate(-1deg); }
+  60%  { transform: translate(0px, 0px) rotate(0deg); opacity: 100%; }
+  100% { transform: scale(1.5, 1.5); opacity: 0%; }
 }
 
-.moveTypeIcon {
-  width: 56px;
-  height: 56px;
-  position-anchor: middle;
-}
-
-.teraTab {
-  stroke: #999999;
-  stroke-width: 4;
+@keyframes pokemon-fainted
+{
+  30% { transform: rotate(30deg) scale(0.8, 0.8); opacity: 100%;}
+  40% { transform: rotate(30deg) scale(0.8, 0.8); opacity: 100%;}
+  100% { transform: rotate(0deg) scale(1, 1); opacity: 50%; }
 }

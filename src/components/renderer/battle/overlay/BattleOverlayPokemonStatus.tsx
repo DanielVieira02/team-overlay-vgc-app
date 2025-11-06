@@ -24,19 +24,32 @@ export const BattleOverlayPokemonStatus = ({
     () => getItemIconPath(item),
     [item],
   );
-
+  
   return (
-    <g className={`${fainted !== undefined && fainted ? "opacity-50" : ""}`}>
-      <image
-          className={`battleOverlayPokemonIcon`}
+    <g>
+        <image
+          className={`battleOverlayPokemonIcon 
+            ${active !== undefined && active ? "hidePokeball" : ""}
+          `}
           x="0"
           y="0"
-          href={active ? pokemonIcon : "assets/Pokeballs/pokeballB.png"}
+          href={"assets/Pokeballs/pokeballB.png"}
       />
+      {active && <image
+          className={`battleOverlayPokemonIcon 
+            ${active !== undefined && active ? "active" : ""}
+            ${fainted !== undefined && fainted ? "fainted" : ""}
+          `}
+          x="0"
+          y="0"
+          href={pokemonIcon}
+      />}
       {item && active &&
       (
       <image 
-        className="battleItemIcon"
+        className={`battleItemIcon 
+          ${active !== undefined && active ? "active" : ""}
+        `}
         x="40"
         y="48"
         href={itemIcon} 

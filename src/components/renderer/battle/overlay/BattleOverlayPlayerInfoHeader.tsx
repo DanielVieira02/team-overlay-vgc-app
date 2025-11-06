@@ -55,11 +55,12 @@ export const BattleOverlayPlayerInfoHeader = ({
         "M -92 0 L 772 -0 Q 789 -6 853 -30 Q 862 -53 853 -53 L -92 -53 Z" :
         "M 92 -0 L -772 0 Q -789 6 -853 30 Q -862 53 -853 53 L 92 53 Z";
 
+    const pathClass = `battleOverlayHeader ${bottom ? "bottomHeader" : "topHeader"}`; 
     
     return (
         <g>
             <path
-                className="battleOverlayContainer"
+                className={pathClass}
                 d={path}
             />
             <BattleOverlayPlayerInfo 

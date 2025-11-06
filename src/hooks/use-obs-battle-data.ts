@@ -9,13 +9,13 @@ interface BattleState {
 export function useSetActivePokemonBattle(connection: OBSConnection | null) {
     return useMutation({
         mutationFn: async ({
-            pokemon,
+            species,
             item,
             index,
             fainted,
             isBottomPlayer,
         }: {
-            pokemon: string,
+            species: string,
             item: string,
             index: number,
             fainted: boolean,
@@ -28,7 +28,7 @@ export function useSetActivePokemonBattle(connection: OBSConnection | null) {
             const finalData = existingData ?? [];            
 
             finalData[index + 1] = {
-                pokemon,
+                species,
                 item,
                 fainted,
             };
