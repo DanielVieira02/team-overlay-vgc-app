@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { OBSConnection } from "../lib/obs-connection";
+import { PokemonSlot } from "../lib/types";
 
 interface BattleState {
     pokemon: any[],
@@ -38,6 +39,42 @@ export function useSetActivePokemonBattle(connection: OBSConnection | null) {
     });
 }
 
+export function useGetPlayerBattleData (connection: OBSConnection | null) {
+    return useMutation({
+        mutationFn: async ({ isBottomPlayer }: {isBottomPlayer: boolean}) => {
+            if (!connection)
+                return undefined;
+            const pokemon = await connection.getPersistentData(isBottomPlayer ? "bottom_pokemon" : "top_pokemon");
+            const score = await connection.getPersistentData(isBottomPlayer ? "bottom_score" : "top_score");
+
+            let initialPokemonData = (pokemon) ?
+                pokemon.map((p: PokemonSlot) => {
+                    return {
+                        species: p.species,
+                        active: true,
+                        item: p.item,
+                        fainted: p.fainted,
+                    }
+                })
+            : [];
+
+            while (initialPokemonData.length < 4) {
+                initialPokemonData.push({
+                    species: undefined,
+                    active: false,
+                    item: undefined,
+                    fainted: false,
+                });
+            }
+
+            return {
+                pokemon: initialPokemonData,
+                score,
+            };
+        },
+    })
+}
+
 export function useBattleState(
     connection: OBSConnection | null,
     isBottomPlayer?: boolean,
@@ -49,7 +86,7 @@ export function useBattleState(
                 return undefined;
             const pokemon = await connection.getPersistentData(isBottomPlayer ? "bottom_pokemon" : "top_pokemon");
             const score = await connection.getPersistentData(isBottomPlayer ? "bottom_score" : "top_score");
-
+            
             return {
                 pokemon,
                 score,
@@ -57,7 +94,6 @@ export function useBattleState(
         },
         enabled: !!connection,
         refetchOnMount: "always",
-        
     })
 }
 
@@ -108,12 +144,15 @@ export function useOBSBattleData(connection: OBSConnection | null, bottom?: bool
     const setActivePokemonBattle = useSetActivePokemonBattle(connection);
     const cleanActivePokemon = useCleanActivePokemon(connection);
     const setIsPokemonFaintedBattle = useSetIsPokemonFaintedBattle(connection);
+    const getPlayerBattleData = useGetPlayerBattleData(connection);
+
     const battleState = useBattleState(connection, bottom);
 
     return {
         setActivePokemonBattle: setActivePokemonBattle.mutate,
         cleanActivePokemon: cleanActivePokemon.mutate,
         setIsPokemonFaintedBattle: setIsPokemonFaintedBattle.mutate,
+        getPlayerBattleData: getPlayerBattleData.mutate,
 
         battleStateData: battleState.data,
         battleStateLoading: battleState.isLoading,

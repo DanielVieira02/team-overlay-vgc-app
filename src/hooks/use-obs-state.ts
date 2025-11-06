@@ -97,7 +97,7 @@ export function useSelectedScene() {
   // Create a query for the selected scene state
   const { data: selectedScene } = useQuery({
     queryKey: ["selected-scene"],
-    queryFn: () => undefined as string | undefined,
+    queryFn: () => "",
     initialData: undefined,
     staleTime: Infinity,
   });
@@ -119,7 +119,7 @@ export function useSelectedSource() {
   // Create a query for the selected source state
   const { data: selectedSource } = useQuery({
     queryKey: ["selected-source"],
-    queryFn: () => undefined as string | undefined,
+    queryFn: () => "",
     initialData: undefined,
     staleTime: Infinity,
   });

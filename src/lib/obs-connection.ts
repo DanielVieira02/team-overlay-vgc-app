@@ -60,11 +60,11 @@ export class OBSConnection {
 
   async getPersistentData(slotName: string): Promise<any> {
     if (!this.obs) throw new Error("Not connected to OBS");
-    const { slotValue } = await this.obs.call("GetPersistentData", {
+    const result = await this.obs.call("GetPersistentData", {
       realm: "OBS_WEBSOCKET_DATA_REALM_GLOBAL",
       slotName,
     });
-    return slotValue;
+    return result.slotValue;
   }
 
   async broadcastCustomEvent(eventData: any): Promise<void> {

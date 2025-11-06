@@ -6,13 +6,15 @@ import { useOBSState } from "@/src/hooks/use-obs-state";
 
 interface BattleOverlayPokemonStatusListProps {
     connection: OBSConnection | null,
-    initialPokemon: PokemonSlot[],
+    activePokemon: PokemonSlot[],
+    setActivePokemon: any,
     bottom?: boolean,
 }
 
 export const BattleOverlayPokemonStatusList = ({
     connection,
-    initialPokemon,
+    activePokemon,
+    setActivePokemon,
     bottom = false,
 }: BattleOverlayPokemonStatusListProps) => {
     const {
@@ -20,8 +22,7 @@ export const BattleOverlayPokemonStatusList = ({
         removeEventListener,
     } = useOBSState(connection);
 
-    const [ addedPokemon, setAddedPokemon ] = useState<number>(initialPokemon ? initialPokemon.filter((p) => p.active).length : 0);
-    const [ activePokemon, setActivePokemon ] = useState<PokemonSlot[]>(initialPokemon ?? []);
+    const [ addedPokemon, setAddedPokemon ] = useState<number>(activePokemon ? activePokemon.filter((p) => p.active).length : 0);
 
     const handleCustomEvent = (eventData: any) => {            
         const eventName = eventData.eventName;
