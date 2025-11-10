@@ -86,7 +86,7 @@ export const BattleOverlayPokemonStatusList = ({
                 (
                     <g 
                         key={`${p}-${index}`}
-                        transform={`translate(0, ${index * 108})`}
+                        transform={`translate(0, ${index * 84})`}
                     >
                         <BattleOverlayPokemonStatus
                             pokemon={p.species}

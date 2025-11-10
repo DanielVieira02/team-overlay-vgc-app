@@ -52,8 +52,8 @@ export const BattleOverlayPlayerInfoHeader = ({
 
 
     const path = bottom ?
-        "M -92 0 L 772 -0 Q 789 -6 853 -30 Q 862 -53 853 -53 L -92 -53 Z" :
-        "M 92 -0 L -772 0 Q -789 6 -853 30 Q -862 53 -853 53 L 92 53 Z";
+        "M-12 0H616Q620-0 624-4L647-28C651-32 650-36 643-36H7Q-12-37-12-59Z" :
+        "M12 0H-616Q-620 0-624 4L-647 28C-651 32-650 36-643 36H-7Q12 37 12 59Z";
 
     const pathClass = `battleOverlayHeader ${bottom ? "bottomHeader" : "topHeader"}`; 
     

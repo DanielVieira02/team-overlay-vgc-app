@@ -12,8 +12,8 @@ export const BattleOverlayPlayerInfo = ({
     bottom = false,
 }: BattleOverlayPlayerInfoProps) => {
     const nameCoords = bottom ?
-        { x: "12", y: "-12"} :
-        { x: "-12", y: "40"};
+        { x: "12", y: "-6"} :
+        { x: "-12", y: "28"};
     const countryBgCoords = bottom ?
         { x: "684", y: "-48"} :
         { x: "-764", y: "6"};

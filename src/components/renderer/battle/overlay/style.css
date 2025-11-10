@@ -21,7 +21,7 @@
 .scoreText {
   font-family: "Oxanium";
   font-weight: bold;
-  font-size: 72;
+  font-size: 64;
   fill: var(--primary-color);
   text-anchor: middle;
   text-transform: uppercase;
@@ -59,7 +59,7 @@
 
 .battleOverlayPlayerNameBottom {
   font-family: "NotoSans";
-  font-size: 32;
+  font-size: 26;
   fill: var(--primary-color);
   text-anchor: start;
   text-transform: uppercase;
@@ -67,7 +67,7 @@
 
 .battleOverlayPlayerNameTop {
   font-family: "NotoSans";
-  font-size: 32;
+  font-size: 26;
   fill: var(--primary-color);
   text-anchor: end;
   text-transform: uppercase;
@@ -89,65 +89,6 @@
   text-transform: uppercase;
 }
 
-.teamSlotHeader {
-  filter: drop-shadow(-10px 8px 4px #000029);
-  fill: var(--primary-color);
-}
-
-.teamSlotItem {
-  fill: var(--primary-color);
-  filter: drop-shadow(-4px 10px 4px #000029);
-}
-
-.teamSlotAbility {
-  fill: var(--secondary-color);
-  filter: drop-shadow(-4px 10px 4px #000029);
-}
-
-.teamSlotItemBackground {
-  fill: white;
-}
-
-.teamSlotMove {
-  fill: var(--primary-color);
-  filter: drop-shadow(-4px 10px 4px #000029);
-}
-
-.textPokemonName {
-  font-family: "NotoSans";
-  font-size: 46;
-  fill: rgb(0, 0, 0);
-  text-anchor: left;
-}
-
-.textPokemonInfo {
-  font-family: "NotoSans";
-  font-size: 32;
-  fill: rgb(0, 0, 0);
-  text-anchor: middle;
-}
-
-.textPokemonAbility {
-  font-family: "NotoSans";
-  font-size: 32;
-  fill: rgb(255, 255, 255);
-  text-anchor: middle;
-}
-
-.textPokemonMove {
-  font-family: "NotoSans";
-  font-size: 32;
-  fill: rgb(0, 0, 0);
-  text-anchor: left;
-}
-
-.battleOverlayPokemonIcon {
-  width: 88px;
-  height: 88px;
-  transform-origin: center;
-  transform-box: fill-box;
-}
-
 .active {
   animation: show-pokemon 1s;
 }
@@ -160,9 +101,16 @@
   animation: pokemon-fainted 1s forwards;
 }
 
+.battleOverlayPokemonIcon {
+  width: 64px;
+  height: 64px;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
 .battleItemIcon {
-  width: 48px;
-  height: 48px;
+  width: 36px;
+  height: 36px;
   transform-origin: center;
   transform-box: fill-box;
 }

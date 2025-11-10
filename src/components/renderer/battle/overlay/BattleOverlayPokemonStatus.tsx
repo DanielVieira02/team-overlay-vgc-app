@@ -50,8 +50,8 @@ export const BattleOverlayPokemonStatus = ({
         className={`battleItemIcon 
           ${active !== undefined && active ? "active" : ""}
         `}
-        x="40"
-        y="48"
+        x="32"
+        y="40"
         href={itemIcon} 
       />
       )}

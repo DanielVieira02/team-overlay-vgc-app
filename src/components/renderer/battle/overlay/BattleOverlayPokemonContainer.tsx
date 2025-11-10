@@ -51,11 +51,11 @@ export const BattleOverlayPokemonContainer = ({
     }, [connection])
 
     const path = bottom ?
-    "M -94 0 H 0 V -480 q -0 -4 -4 -10 c -16.6667 -16.6667 -33.3333 -33.3333 -50 -50 H -72 q -22 0 -22 22 V -490 Z" :
-    "M 94 -0 H 0 V 480 q 0 4 4 10 c 16.6667 16.6667 33.3333 33.3333 50 50 H 72 q 22 -0 22 -22 V 490 Z";
+    "M-92 0V-431Q-93-459-65-433L-16-386Q-12-382-12-375V0Z" :
+    "M92 0V431Q93 459 65 433L16 386Q12 382 12 375V0Z";
     const slotsTransform = bottom ? 
-    "translate(-91, -428)" :
-    "translate(3,4)";
+    "translate(-85, -340)" :
+    "translate(20, 20)";
     const groupClass = `battleOverlayContainerParent ${bottom ? "bottomContainer" : "topContainer"}`; 
 
     return (

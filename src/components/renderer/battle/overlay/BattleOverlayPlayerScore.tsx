@@ -20,10 +20,10 @@ export const BattleOverlayPlayerScore = ({
     const [ score, setScore ] = useState<number>(initialScore);
     const scoreCoords = bottom ?
     {
-        x: -48, y: -450,
+        x: -56, y: -356,
     } :
     {
-        x: 48, y: 490,
+        x: 56, y: 396,
     };
 
     const handleEventListener = (eventData: any) => {
