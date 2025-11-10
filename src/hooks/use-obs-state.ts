@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
 import type { OBSConnection } from "@/src/lib/obs-connection";
+import { eventNames } from "process";
 
 // Types for OBS data
 interface OBSScene {
@@ -67,6 +67,29 @@ export function useUpdateSourceUrl(connection: OBSConnection | null) {
   });
 }
 
+export function useBroadcastCustomEvent(connection: OBSConnection | null) {
+  return useMutation({
+    mutationFn: async ({
+      eventData,
+    }: {
+      eventData: any;
+    }) => {
+      if (!connection) throw new Error("No OBS connection");
+      return await connection.broadcastCustomEvent(eventData);
+    }
+  });
+}
+
+export function useAddEventListener(connection: OBSConnection | null, eventName: string, eventHandler: Function) {
+  if (!connection) throw new Error("No OBS connection");
+  connection.addEventListener(eventName, eventHandler);
+}
+
+export function useRemoveEventListener(connection: OBSConnection | null, eventName: string, eventHandler: Function) {
+  if (!connection) throw new Error("No OBS connection");
+  connection.removeEventListener(eventName, eventHandler);
+}
+
 // Shared selection state using React Query with reactive updates
 export function useSelectedScene() {
   const queryClient = useQueryClient();
@@ -106,6 +129,16 @@ export function useSelectedSource() {
   };
 
   return [selectedSource, setSelectedSource] as const;
+}
+
+export function useSetPersistentData(connection: OBSConnection | null, slotName: string, slotValue: any) {
+  if (!connection) throw new Error("No OBS connection");
+  connection.setPersistentData(slotName, slotValue);
+}
+
+export async function useGetPersistentData(connection: OBSConnection | null, slotName: string) {
+  if (!connection) throw new Error("No OBS connection");
+  return await connection.getPersistentData(slotName);
 }
 
 // Persistent source assignments across scenes
@@ -170,6 +203,13 @@ export function useOBSState(connection: OBSConnection | null) {
   const scenesQuery = useOBSScenes(connection);
   const sourcesQuery = useOBSSources(connection, selectedScene);
   const updateUrlMutation = useUpdateSourceUrl(connection);
+  const broadcastCustomEvent = useBroadcastCustomEvent(connection);
+
+  const addEventListener = useAddEventListener;
+  const removeEventListener = useRemoveEventListener;
+
+  const setPersistentData = useSetPersistentData;
+  const getPersistentData = useGetPersistentData;
 
   return {
     // Data
@@ -197,11 +237,17 @@ export function useOBSState(connection: OBSConnection | null) {
 
     // Mutations
     updateSourceUrl: updateUrlMutation.mutate,
+    broadcastCustomEvent: broadcastCustomEvent.mutate,    
     isUpdatingUrl: updateUrlMutation.isPending,
     updateUrlError: updateUrlMutation.error,
 
     // Refetch functions
     refetchScenes: scenesQuery.refetch,
     refetchSources: sourcesQuery.refetch,
+
+    addEventListener: addEventListener,
+    removeEventListener: removeEventListener,
+    setPersistentData,
+    getPersistentData,
   };
 }

@@ -1,0 +1,103 @@
+@font-face {
+  font-family: "NotoSans";
+  src:
+    local("NotoSans"),
+    url(../../../assets/Fonts/NotoSans-ExtraBold.ttf) format("truetype");
+}
+
+:root {
+  --body-color: #39245b;
+  --primary-color: #ffffff;
+  --secondary-color: #007aa3;
+}
+
+.teamSlotBody {
+  fill: var(--body-color);
+  filter: drop-shadow(-10px 8px 4px hwb(240 0% 84%));
+}
+
+.teamSlotHeader {
+  filter: drop-shadow(-10px 8px 4px #000029);
+  fill: var(--primary-color);
+}
+
+.teamSlotItem {
+  fill: var(--primary-color);
+  filter: drop-shadow(-4px 10px 4px #000029);
+}
+
+.teamSlotAbility {
+  fill: var(--secondary-color);
+  filter: drop-shadow(-4px 10px 4px #000029);
+}
+
+.teamSlotItemBackground {
+  fill: white;
+}
+
+.teamSlotMove {
+  fill: var(--primary-color);
+  filter: drop-shadow(-4px 10px 4px #000029);
+}
+
+.textPokemonName {
+  font-family: "NotoSans";
+  font-size: 46;
+  fill: rgb(0, 0, 0);
+  text-anchor: left;
+}
+
+.textPokemonInfo {
+  font-family: "NotoSans";
+  font-size: 32;
+  fill: rgb(0, 0, 0);
+  text-anchor: middle;
+}
+
+.textPokemonAbility {
+  font-family: "NotoSans";
+  font-size: 32;
+  fill: rgb(255, 255, 255);
+  text-anchor: middle;
+}
+
+.textPokemonMove {
+  font-family: "NotoSans";
+  font-size: 32;
+  fill: rgb(0, 0, 0);
+  text-anchor: left;
+}
+
+.pokemonIcon {
+  filter: drop-shadow(-4px 10px 4px #000029);
+  width: 250px;
+  height: 250px;
+}
+
+.itemIcon {
+  width: 64px;
+  height: 64px;
+}
+
+.typeIcon {
+  width: 76px;
+  height: 76px;
+  position-anchor: middle;
+}
+
+.teraTypeIcon {
+  width: 124px;
+  height: 124px;
+  position-anchor: middle;
+}
+
+.moveTypeIcon {
+  width: 56px;
+  height: 56px;
+  position-anchor: middle;
+}
+
+.teraTab {
+  stroke: #999999;
+  stroke-width: 4;
+}

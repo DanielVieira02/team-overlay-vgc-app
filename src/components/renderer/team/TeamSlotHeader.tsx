@@ -2,7 +2,7 @@ import "./style.css";
 
 import { TypeIcon } from "./TypeIcon";
 import { Pokemon } from "@/src/lib/types";
-import { getPokemonTypes } from "../../lib/pokedex";
+import { getPokemonTypes } from "../../../lib/pokedex";
 
 interface TeamSlotHeader {
   pokemon: Pokemon;

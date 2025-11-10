@@ -13,8 +13,8 @@ type OBSConnectionContextType = {
   connection: OBSConnection | null;
   isConnected: boolean;
   isConnecting: boolean;
-  connect: (url: string, password?: string) => Promise<void>;
-  disconnect: () => Promise<void>;
+  connect: (url: string, password?: string, showToast?: boolean) => Promise<void>;
+  disconnect: (showToast?: boolean) => Promise<void>;
 };
 
 const ObsConnectionContext = createContext<
@@ -27,16 +27,18 @@ export function OBSConnectionProvider({ children }: { children: ReactNode }) {
   const { toast } = useToast();
 
   const connect = useCallback(
-    async (url: string, password?: string) => {
+    async (url: string, password?: string, showToast?: boolean) => {
       setIsConnecting(true);
       try {
         const obs = new OBSConnection();
         await obs.connect(url, password);
         setConnection(obs);
-        toast({
-          title: "Connected to OBS",
-          description: "Successfully connected to OBS WebSocket",
-        });
+        if(showToast !== false) {
+          toast({
+            title: "Connected to OBS",
+            description: "Successfully connected to OBS WebSocket",
+          });
+        }
       } catch (error: any) {
         toast({
           title: "Connection Failed",
@@ -51,14 +53,16 @@ export function OBSConnectionProvider({ children }: { children: ReactNode }) {
     [toast],
   );
 
-  const disconnect = useCallback(async () => {
+  const disconnect = useCallback(
+    async (showToast?: boolean) => {
     if (connection) {
       await connection.disconnect();
       setConnection(null);
-      toast({
-        title: "Disconnected",
-        description: "Disconnected from OBS",
-      });
+      if(showToast !== false)
+        toast({
+          title: "Disconnected",
+          description: "Disconnected from OBS",
+        });
     }
   }, [connection, toast]);
 

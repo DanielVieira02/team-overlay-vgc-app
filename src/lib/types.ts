@@ -44,3 +44,10 @@ export interface OBSConnectionConfig {
   url: string;
   password?: string;
 }
+
+export interface PokemonSlot {
+    species: string | undefined,
+    item: string | undefined,
+    active: boolean,
+    fainted?: boolean,
+}

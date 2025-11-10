@@ -1,4 +1,4 @@
-import { getMoveType } from "../../lib/pokedex";
+import { getMoveType } from "../../../lib/pokedex";
 import { TypeIcon } from "./TypeIcon";
 
 import "./style.css";

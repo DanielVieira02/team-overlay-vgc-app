@@ -2,7 +2,14 @@
   font-family: "NotoSans";
   src:
     local("NotoSans"),
-    url(../../assets/Fonts/NotoSans-ExtraBold.ttf) format("truetype");
+    url(../../../../assets/Fonts/NotoSans-ExtraBold.ttf) format("truetype");
+}
+
+@font-face {
+  font-family: "Oxanium";
+  src:
+    local("Oxanium"),
+    url(../../../../assets/Fonts/Oxanium-VariableFont.ttf) format("truetype");
 }
 
 :root {
@@ -11,10 +18,51 @@
   --secondary-color: #007aa3;
 }
 
-.teamSlotBody {
-  fill: var(--body-color);
-  filter: drop-shadow(-10px 8px 4px hwb(240 0% 84%));
+.scoreText {
+  font-family: "Oxanium";
+  font-weight: bold;
+  font-size: 72;
+  fill: var(--primary-color);
+  text-anchor: middle;
+  text-transform: uppercase;
 }
+
+.battleOverlayContainer {
+  fill: var(--body-color);
+}
+
+.battleOverlayPlayerNameBottom {
+  font-family: "NotoSans";
+  font-size: 32;
+  fill: var(--primary-color);
+  text-anchor: start;
+  text-transform: uppercase;
+}
+
+.battleOverlayPlayerNameTop {
+  font-family: "NotoSans";
+  font-size: 32;
+  fill: var(--primary-color);
+  text-anchor: end;
+  text-transform: uppercase;
+}
+
+.battleOverlayPlayerCountryBottom {
+  font-family: "NotoSans";
+  font-size: 32;
+  fill: var(--body-color);
+  text-anchor: start;
+  text-transform: uppercase;
+}
+
+.battleOverlayPlayerCountryTop {
+  font-family: "NotoSans";
+  font-size: 32;
+  fill: var(--body-color);
+  text-anchor: end;
+  text-transform: uppercase;
+}
+
 
 .teamSlotHeader {
   filter: drop-shadow(-10px 8px 4px #000029);
@@ -68,15 +116,20 @@
   text-anchor: left;
 }
 
-.pokemonIcon {
-  filter: drop-shadow(-4px 10px 4px #000029);
-  width: 250px;
-  height: 250px;
+.battleOverlayPokemonIcon {
+  width: 88px;
+  height: 88px;
 }
 
-.itemIcon {
-  width: 64px;
-  height: 64px;
+.battleOverlayPokemonIconFainted {
+  width: 88px;
+  height: 88px;
+  opacity: 50%;
+}
+
+.battleItemIcon {
+  width: 48px;
+  height: 48px;
 }
 
 .typeIcon {
