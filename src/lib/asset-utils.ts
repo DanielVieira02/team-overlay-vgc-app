@@ -2,7 +2,7 @@ import pokemonTranslator from "../assets/TranslatorPokes.json";
 import itemTranslator from "../assets/TranslatorItems.json";
 
 export function getPokemonIconPath(pokemonName: string): string {
-  if (!pokemonName) return "/assets/PokeIcons/025_000.png";
+  if (!pokemonName) return "/src/assets/PokeIcons/025_000.png";
 
   // Clean the pokemon name to match the translator
   const cleanName = pokemonName
@@ -24,7 +24,7 @@ export function getPokemonIconPath(pokemonName: string): string {
     if (pokemonTranslator[variation as keyof typeof pokemonTranslator]) {
       const spriteId =
         pokemonTranslator[variation as keyof typeof pokemonTranslator];
-      return `/assets/PokeIcons/${spriteId}.png`;
+      return `/src/assets/PokeIcons/${spriteId}.png`;
     }
   }
 
